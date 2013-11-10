@@ -5,7 +5,7 @@ public class CampoDecimal extends CampoBase {
 	private int precisaoDecimais;
 
 	public CampoDecimal(int ID, int precisaoDecimais, String nome,
-			String legenda, boolean obrigatorio, boolean chavePrimaria,
+			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
 			boolean excluido) {
 		super.setID(ID);
 		super.setNome(nome);
@@ -13,7 +13,8 @@ public class CampoDecimal extends CampoBase {
 		super.setObrigatorio(obrigatorio);
 		super.setExcluido(excluido);
 		super.setChavePrimaria(chavePrimaria);
-
+		super.setTabela(tabela);
+		
 		setPrecisaoDecimais(precisaoDecimais);
 	}
 

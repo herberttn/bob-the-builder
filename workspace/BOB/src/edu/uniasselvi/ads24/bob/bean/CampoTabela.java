@@ -1,11 +1,11 @@
 package edu.uniasselvi.ads24.bob.bean;
 
-public class CampoTabela extends CampoInteiro {
+public class CampoTabela extends CampoInteger {
 	private Tabela tabela;
 	private boolean integridade;
 	
 	public CampoTabela(int ID, Tabela tabela, String nome,
-			String legenda, boolean integridade, boolean obrigatorio, boolean chavePrimaria,
+			String legenda, Tabela tabelaPai, boolean integridade, boolean obrigatorio, boolean chavePrimaria,
 			boolean excluido) {
 		super.setID(ID);
 		super.setNome(nome);
@@ -13,6 +13,7 @@ public class CampoTabela extends CampoInteiro {
 		super.setObrigatorio(obrigatorio);
 		super.setExcluido(excluido);
 		super.setChavePrimaria(chavePrimaria);
+		super.setTabela(tabelaPai);
 
 		SetTabela(tabela);
 		setIntegridade(integridade);

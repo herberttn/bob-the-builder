@@ -6,11 +6,22 @@ public class CampoBase implements IDataDefinitionLanguage{
 	private int id;
 	private String nome;
 	private String legenda;
+	private Tabela tabela;
 	private boolean obrigatorio;
 	private boolean excluido;
 	private boolean chavePrimaria;
 
-	public CampoBase(int ID, String nome, String legenda, boolean obrigatorio,
+	public Tabela getTabela()
+	{
+		return this.tabela;
+	}
+	
+	public void setTabela( Tabela tabela )
+	{
+		this.tabela = tabela;
+	}
+
+	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio,
 			boolean excluido, boolean chavePrimaria) {
 		setID(ID);
 		setNome(nome);
@@ -18,10 +29,11 @@ public class CampoBase implements IDataDefinitionLanguage{
 		setObrigatorio(obrigatorio);
 		setExcluido(excluido);
 		setChavePrimaria(chavePrimaria);
+		setTabela(tabela);
 	}
-
+	
 	public CampoBase() {
-		this(-1,"Indefinido", "Indefinido", false, false, false);
+		this(-1, "Indefinido", "Indefinido", null, false, false, false);
 	}
 
 	public void setChavePrimaria(boolean chavePrimaria) {

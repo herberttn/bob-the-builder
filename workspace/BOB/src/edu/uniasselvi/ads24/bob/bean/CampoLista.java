@@ -2,11 +2,12 @@ package edu.uniasselvi.ads24.bob.bean;
 
 import java.util.ArrayList;
 
-public class CampoLista extends CampoInteiro {
+public class CampoLista extends CampoInteger {
 	private CampoListaItem assumirPadrao;
 	private ArrayList<CampoListaItem> itens;
 
 	public CampoLista(int ID, String nome, String legenda, 
+			Tabela tabela,
 			CampoListaItem assumirPadrao,
 			ArrayList<CampoListaItem> itens,
 			boolean obrigatorio,
@@ -17,6 +18,7 @@ public class CampoLista extends CampoInteiro {
 		super.setObrigatorio(obrigatorio);
 		super.setExcluido(excluido);
 		super.setChavePrimaria(chavePrimaria);
+		super.setTabela(tabela);		
 		
 		setAssumirPadrao(assumirPadrao);
 		setItens(itens);

@@ -5,7 +5,7 @@ public class CampoString extends CampoBase {
 	private int tamanho;
 	
 	public CampoString(int ID, int tamanho, String nome,
-			String legenda, boolean obrigatorio, boolean chavePrimaria,
+			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
 			boolean excluido) {
 		super.setID(ID);
 		super.setNome(nome);
@@ -13,6 +13,7 @@ public class CampoString extends CampoBase {
 		super.setObrigatorio(obrigatorio);
 		super.setExcluido(excluido);
 		super.setChavePrimaria(chavePrimaria);
+		super.setTabela(tabela);
 		
 		setTamanho(tamanho);
 	}

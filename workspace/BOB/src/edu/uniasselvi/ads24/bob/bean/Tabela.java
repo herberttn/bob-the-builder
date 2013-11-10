@@ -19,10 +19,10 @@ public class Tabela implements IDataDefinitionLanguage{
 		setNome(nome);
 		setLegenda(legenda);
 		setPorEmpresa(porEmpresa);
-		setPorFilia(porFilial);
+		setPorFilial(porFilial);
 	}
 
-	public void setPorFilia(boolean porFilial) {
+	public void setPorFilial(boolean porFilial) {
 		this.porFilial = porFilial;
 	}
 
