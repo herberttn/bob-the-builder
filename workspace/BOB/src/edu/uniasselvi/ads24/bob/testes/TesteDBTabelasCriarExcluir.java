@@ -1,12 +1,12 @@
-package edu.uniasselvi.ads24.testes;
+package edu.uniasselvi.ads24.bob.testes;
 
-import edu.uniasselvi.ads24.db.conexao.DBException;
-import edu.uniasselvi.ads24.db.dao.CampoDAO;
-import edu.uniasselvi.ads24.db.dao.CampoItemDAO;
-import edu.uniasselvi.ads24.db.dao.EmpresaDAO;
-import edu.uniasselvi.ads24.db.dao.FilialDAO;
-import edu.uniasselvi.ads24.db.dao.ScriptDAO;
-import edu.uniasselvi.ads24.db.dao.TabelaDAO;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
+import edu.uniasselvi.ads24.bob.db.dao.CampoItemDAO;
+import edu.uniasselvi.ads24.bob.db.dao.EmpresaDAO;
+import edu.uniasselvi.ads24.bob.db.dao.FilialDAO;
+import edu.uniasselvi.ads24.bob.db.dao.ScriptDAO;
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 
 public class TesteDBTabelasCriarExcluir {
 

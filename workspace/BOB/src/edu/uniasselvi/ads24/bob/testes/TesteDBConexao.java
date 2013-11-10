@@ -1,7 +1,7 @@
-package edu.uniasselvi.ads24.testes;
+package edu.uniasselvi.ads24.bob.testes;
 
-import edu.uniasselvi.ads24.db.conexao.DBException;
-import edu.uniasselvi.ads24.db.conexao.Conexao;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 
 public class TesteDBConexao {
 

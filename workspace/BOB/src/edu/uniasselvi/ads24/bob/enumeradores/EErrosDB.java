@@ -1,4 +1,4 @@
-package edu.uniasselvi.ads24.db.conexao;
+package edu.uniasselvi.ads24.bob.enumeradores;
 
 public enum EErrosDB {
 	

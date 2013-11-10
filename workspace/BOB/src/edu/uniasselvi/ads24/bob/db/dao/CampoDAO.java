@@ -1,11 +1,10 @@
-package edu.uniasselvi.ads24.db.dao;
+package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.sql.Connection;
 import java.sql.Statement;
-
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
-import edu.uniasselvi.ads24.db.conexao.DBException;
-import edu.uniasselvi.ads24.db.conexao.Conexao;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 
 public class CampoDAO implements IDataAccessObject {
 

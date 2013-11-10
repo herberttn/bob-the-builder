@@ -1,14 +1,15 @@
-package edu.uniasselvi.ads24.geradores;
+package edu.uniasselvi.ads24.bob.geradores;
 
 import edu.uniasselvi.ads24.bob.bean.CampoBase;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 
 public class GeradorComandoDB {
 
-	ETipoGerador tipo = ETipoGerador.NENHUM;
+	ETipoGeracao tipo = ETipoGeracao.NENHUM;
 	boolean gerarScript = false;
 
-	public GeradorComandoDB(ETipoGerador tipo, boolean gerarScript) {
+	public GeradorComandoDB(ETipoGeracao tipo, boolean gerarScript) {
 		this.tipo = tipo;
 		this.gerarScript = gerarScript;
 	}

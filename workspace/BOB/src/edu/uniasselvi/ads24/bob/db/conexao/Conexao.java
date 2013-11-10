@@ -1,7 +1,10 @@
-package edu.uniasselvi.ads24.db.conexao;
+package edu.uniasselvi.ads24.bob.db.conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+
+import edu.uniasselvi.ads24.bob.enumeradores.EErrosDB;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public class Conexao {
 	

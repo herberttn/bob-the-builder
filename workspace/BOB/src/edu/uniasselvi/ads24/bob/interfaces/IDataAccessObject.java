@@ -1,6 +1,6 @@
 package edu.uniasselvi.ads24.bob.interfaces;
 
-import edu.uniasselvi.ads24.db.conexao.DBException;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public interface IDataAccessObject {
 	public boolean CriarTabela() throws DBException;

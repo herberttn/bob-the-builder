@@ -1,4 +1,6 @@
-package edu.uniasselvi.ads24.db.conexao;
+package edu.uniasselvi.ads24.bob.exceptions;
+
+import edu.uniasselvi.ads24.bob.enumeradores.EErrosDB;
 
 public class DBException extends Exception {
 	

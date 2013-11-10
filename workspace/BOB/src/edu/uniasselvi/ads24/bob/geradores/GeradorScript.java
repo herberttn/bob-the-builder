@@ -1,13 +1,14 @@
-package edu.uniasselvi.ads24.geradores;
+package edu.uniasselvi.ads24.bob.geradores;
 
 import edu.uniasselvi.ads24.bob.bean.CampoBase;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 
 public class GeradorScript {
 
-	ETipoGerador tipo = ETipoGerador.NENHUM;
+	ETipoGeracao tipo = ETipoGeracao.NENHUM;
 
-	public GeradorScript(ETipoGerador tipo) {
+	public GeradorScript(ETipoGeracao tipo) {
 		this.tipo = tipo;
 	}
 
