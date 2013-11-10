@@ -3,7 +3,10 @@ package edu.uniasselvi.ads24.bob.bean;
 public class CampoDecimal extends CampoBase {
 	// Número de casas decimais;
 	private int precisaoDecimais;
-
+	public CampoDecimal()
+	{
+		setPrecisaoDecimais(-1);
+	}
 	public CampoDecimal(int ID, int precisaoDecimais, String nome,
 			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
 			boolean excluido) {

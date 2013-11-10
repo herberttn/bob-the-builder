@@ -5,7 +5,12 @@ import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import edu.uniasselvi.ads24.bob.bean.CampoBase;
+import edu.uniasselvi.ads24.bob.bean.CampoDecimal;
+import edu.uniasselvi.ads24.bob.bean.CampoInteger;
+import edu.uniasselvi.ads24.bob.bean.CampoString;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoCampo;
 
 public final class MenuMain {
 
@@ -35,8 +40,44 @@ public final class MenuMain {
 		return "";
 	}
 
-	private static String menuCriarCampo(BufferedReader teclado, Tabela tabela) throws RuntimeException, IOException {
-		int opcaoEscolhida = -1; 
+	private static void menuInformarCampoBase(BufferedReader teclado,
+			CampoBase campoBase) throws IOException {
+		System.out.println("Informe um código único");
+		campoBase.setID(Integer.parseInt(teclado.readLine()));
+		System.out.println("Nome do campo");
+		campoBase.setNome(teclado.readLine());
+		System.out.println("Legenda do campo");
+		campoBase.setLegenda(teclado.readLine());
+		System.out
+				.println("Este campo deve ser obrigatóriamente preenchido(S/N)?");
+		campoBase.setObrigatorio((teclado.readLine().toUpperCase() == "S"));
+		System.out.println("Este campo é uma chave primária(S/N)?");
+		campoBase.setChavePrimaria((teclado.readLine().toUpperCase() == "S"));
+	}
+
+	private static void menuInformarCampoInteger(BufferedReader teclado,
+			CampoInteger campoInteger) throws IOException {
+		menuInformarCampoBase(teclado, campoInteger);
+	}
+
+	private static void menuInformarCampoString(BufferedReader teclado,
+			CampoString campoString) throws IOException {
+		menuInformarCampoBase(teclado, campoString);
+		System.out
+				.println("Informe o tamanho máximo para preenchimento deste campo");
+		campoString.setTamanho(Integer.parseInt(teclado.readLine()));
+	}
+
+	private static void menuInformarCampoDecimal(BufferedReader teclado,
+			CampoDecimal campoDecimal) throws IOException {
+		menuInformarCampoBase(teclado, campoDecimal);
+		System.out.println("Informe a quantidade de casas decimais");
+		campoDecimal.setPrecisaoDecimais(Integer.parseInt(teclado.readLine()));
+	}
+
+	private static String menuCriarCampo(BufferedReader teclado, Tabela tabela)
+			throws RuntimeException, IOException {
+		int opcaoEscolhida = -1;
 		System.out.println("---------------|Criação CAMPO|---------------");
 		System.out.println("Informe o tipo do campo");
 		System.out.println("1 - Integer ");
@@ -46,8 +87,33 @@ public final class MenuMain {
 		System.out.println("5 - PK ");
 		System.out.println("6 - Tabela ");
 		opcaoEscolhida = Integer.parseInt(teclado.readLine());
-		
-		return "";
+		switch (opcaoEscolhida) {
+		case 1:
+			System.out.println("---------------|Campo INTEGER|---------------");
+			CampoInteger campoInteger = new CampoInteger();
+			campoInteger.setTabela(tabela);
+			menuInformarCampoInteger(teclado, campoInteger);
+			break;
+		case 2:
+			System.out.println("---------------|Campo STRING|---------------");
+			CampoString campoString = new CampoString();
+			campoString.setTabela(tabela);
+			menuInformarCampoString(teclado, campoString);
+			break;
+		case 3:
+			System.out.println("---------------|Campo DECIMAL|---------------");
+			CampoDecimal campoDecimal = new CampoDecimal();
+			campoDecimal.setTabela(tabela);
+			menuInformarCampoDecimal(teclado, campoDecimal);
+			break;
+		default:
+			break;
+		}
+		System.out.println("Continuar criando campos para esta tabela(S/N)?");
+		if ((teclado.readLine().toUpperCase() == "S")) {
+			menuCriarCampo(teclado, tabela);
+		}
+		return "Campo(s) criado(s) com sucesso!";
 	}
 
 	private static String menuCriarTabela(BufferedReader teclado)
@@ -59,20 +125,20 @@ public final class MenuMain {
 		System.out.println("Informe uma legenda para exibição desta tabela: ");
 		tabela.setLegenda(teclado.readLine());
 		System.out.print("Está tabela é por EMPRESA(S/N): ");
-		tabela.setPorEmpresa((teclado.readLine() == "S"));
+		tabela.setPorEmpresa((teclado.readLine().toUpperCase() == "S"));
 		System.out.print("Está tabela é por FILIAL(S/N): ");
-		tabela.setPorFilial((teclado.readLine() == "S"));
+		tabela.setPorFilial((teclado.readLine().toUpperCase() == "S"));
 
 		System.out.print("Deseja criar os campos desta tabela(S/N)?");
-		if (teclado.readLine() == "S") {
+		if (teclado.readLine().toUpperCase() == "S") {
 			menuCriarCampo(teclado, tabela);
 		}
 
 		return "Tabela criada com sucesso!";
 	}
 
-	private static int menuPrincipal(BufferedReader teclado) {
 		System.out
+		private static int menuPrincipal(BufferedReader teclado) {
 				.println("---------------|BOB - The constructor|---------------");
 		System.out.println("1 - Criar tabela");
 		System.out.println("2 - Criar campo");

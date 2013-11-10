@@ -4,6 +4,11 @@ public class CampoString extends CampoBase {
 	//Capacidade de armazenamento do campo string.
 	private int tamanho;
 	
+	public CampoString()
+	{
+		setTamanho(-1);
+	}
+	
 	public CampoString(int ID, int tamanho, String nome,
 			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
 			boolean excluido) {
