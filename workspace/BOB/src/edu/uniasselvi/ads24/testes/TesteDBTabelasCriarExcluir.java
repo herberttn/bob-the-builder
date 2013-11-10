@@ -1,6 +1,6 @@
 package edu.uniasselvi.ads24.testes;
 
-import edu.uniasselvi.ads24.db.conexao.BancoDadosException;
+import edu.uniasselvi.ads24.db.conexao.DBException;
 import edu.uniasselvi.ads24.db.dao.CampoDAO;
 import edu.uniasselvi.ads24.db.dao.CampoItemDAO;
 import edu.uniasselvi.ads24.db.dao.EmpresaDAO;
@@ -49,7 +49,7 @@ public class TesteDBTabelasCriarExcluir {
 
 			System.out.println("Criando tabela Z_SCRIPT.");
 			scriptDAO.CriarTabela();
-		} catch (BancoDadosException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -74,7 +74,7 @@ public class TesteDBTabelasCriarExcluir {
 			System.out.println("Excluindo tabela Z_TABELAS.");
 			tabelaDAO.ExcluirTabela();
 
-		} catch (BancoDadosException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

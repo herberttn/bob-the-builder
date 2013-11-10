@@ -3,12 +3,13 @@ package edu.uniasselvi.ads24.db.dao;
 import java.sql.Connection;
 import java.sql.Statement;
 
-import edu.uniasselvi.ads24.db.conexao.BancoDadosException;
+import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
+import edu.uniasselvi.ads24.db.conexao.DBException;
 import edu.uniasselvi.ads24.db.conexao.Conexao;
 
-public class FilialDAO {
+public class FilialDAO implements IDataAccessObject {
 
-	public boolean CriarTabela() throws BancoDadosException {
+	public boolean CriarTabela() throws DBException {
 		Connection conexao = Conexao.getConexao();
 		try {
 			Statement st = conexao.createStatement();
@@ -26,7 +27,7 @@ public class FilialDAO {
 		}
 	}
 	
-	public boolean ExcluirTabela() throws BancoDadosException {
+	public boolean ExcluirTabela() throws DBException {
 		Connection conexao = Conexao.getConexao();
 		try {
 			Statement st = conexao.createStatement();
