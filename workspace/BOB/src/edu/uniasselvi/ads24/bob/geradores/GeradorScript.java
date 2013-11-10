@@ -12,11 +12,11 @@ public class GeradorScript {
 		this.tipo = tipo;
 	}
 
-	public void Gerar(Tabela tabela) {
+	public void Gerar(Tabela tabelaAntes, Tabela tabelaDepois) {
 
 	}
 
-	public void Gerar(CampoBase campo) {
+	public void Gerar(CampoBase campoAntes, CampoBase campoDepois) {
 
 	}
 }
