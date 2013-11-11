@@ -1,8 +1,10 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoBase implements IDataDefinitionLanguage{
+public abstract class CampoBase implements IDataDefinitionLanguage {
+
 	private int id;
 	private String nome;
 	private String legenda;
@@ -11,18 +13,16 @@ public class CampoBase implements IDataDefinitionLanguage{
 	private boolean excluido;
 	private boolean chavePrimaria;
 
-	public Tabela getTabela()
-	{
+	public Tabela getTabela() {
 		return this.tabela;
 	}
-	
-	public void setTabela( Tabela tabela )
-	{
+
+	public void setTabela(Tabela tabela) {
 		this.tabela = tabela;
 	}
 
-	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio,
-			boolean excluido, boolean chavePrimaria) {
+	public CampoBase(int ID, String nome, String legenda, Tabela tabela,
+			boolean obrigatorio, boolean excluido, boolean chavePrimaria) {
 		setID(ID);
 		setNome(nome);
 		setLegenda(legenda);
@@ -31,7 +31,7 @@ public class CampoBase implements IDataDefinitionLanguage{
 		setChavePrimaria(chavePrimaria);
 		setTabela(tabela);
 	}
-	
+
 	public CampoBase() {
 		this(-1, "Indefinido", "Indefinido", null, false, false, false);
 	}
@@ -85,21 +85,63 @@ public class CampoBase implements IDataDefinitionLanguage{
 	}
 
 	@Override
-	public void Criar() {
-		// TODO Auto-generated method stub
-		
+	public abstract void Criar();
+
+	@Override
+	public abstract void Alterar();
+
+	@Override
+	public abstract void Excluir();
+
+	@Override
+	public String ComandoGerar(ETipoGeracao tipoGeracao) {
+
+		String comando = "ALTER TABLE " + getTabela().getNome().toUpperCase();
+
+		switch (tipoGeracao) {
+		case NENHUM:
+			return null;
+
+		case CRIACAO:
+			comando = comando + " ADD COLUMN " + getNome().toUpperCase()
+					+ ComandoGetTipo() 
+					+ ComandoGetNotNUll()
+					+ ComandoGetAtributos();
+			break;
+
+		case ALTERACAO:
+			comando = comando + " CHANGE COLUMN " + getNome().toUpperCase()
+					+ ComandoGetTipo() 
+					+ ComandoGetNotNUll()
+					+ ComandoGetAtributos();
+			break;
+
+		case EXCLUSAO:
+			comando = comando + " DROP COLUMN " + getNome().toUpperCase();
+			break;
+
+		default:
+			return null;
+		}
+
+		return comando;
 	}
 
 	@Override
-	public void Alterar() {
-		// TODO Auto-generated method stub
-		
+	public String ComandoGetAtributos() {
+		return "";
 	}
 
 	@Override
-	public void Excluir() {
-		// TODO Auto-generated method stub
-		
+	public String ComandoGetNotNUll() {
+		if (getObrigatorio())
+			return " NOT NULL ";
+
+		return "";
 	}
 
+	@Override
+	public String ComandoGetTipo() {
+		return "";
+	}
 }

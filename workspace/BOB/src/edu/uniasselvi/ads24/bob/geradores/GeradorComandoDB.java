@@ -62,10 +62,6 @@ public class GeradorComandoDB {
 			
 			if (campoAntes.getObrigatorio())
 				comando = comando + " NOT NULL ";
-			
-			
-			
-			        + " VARCHAR(45)";
 			break;
 
 		case ALTERACAO:

@@ -1,6 +1,6 @@
 package edu.uniasselvi.ads24.bob.testes;
 
-public class Neto extends Filho {
+public class TesteHerancaNeto extends TesteHerancaFilho {
 
 	@Override
 	public String GetComando() {

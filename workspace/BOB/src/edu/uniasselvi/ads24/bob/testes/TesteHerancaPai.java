@@ -1,6 +1,6 @@
 package edu.uniasselvi.ads24.bob.testes;
 
-public class Pai {
+public class TesteHerancaPai {
 	
 	public String GetComando() {
 		return "comando do pai";

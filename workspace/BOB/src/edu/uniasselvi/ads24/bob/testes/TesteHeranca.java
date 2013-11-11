@@ -1,16 +1,16 @@
 package edu.uniasselvi.ads24.bob.testes;
 
-public class TesteLoko {
+public class TesteHeranca {
 
 	public static void main(String[] args) {
 		
-		Pai obj = new Pai();
+		TesteHerancaPai obj = new TesteHerancaPai();
 		System.out.println(obj.GetComando());
 		
-		obj = new Filho();
+		obj = new TesteHerancaFilho();
 		System.out.println(obj.GetComando());
 		
-		obj = new Neto();
+		obj = new TesteHerancaNeto();
 		System.out.println(obj.GetComando());
 	}
 

@@ -1,8 +1,10 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class Tabela implements IDataDefinitionLanguage{
+public class Tabela implements IDataDefinitionLanguage {
+	
 	private int ID;
 	private String nome;
 	private String legenda;
@@ -70,19 +72,35 @@ public class Tabela implements IDataDefinitionLanguage{
 	@Override
 	public void Criar() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void Alterar() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void Excluir() {
 		// TODO Auto-generated method stub
-		
 	}
 
+	@Override
+	public String ComandoGerar(ETipoGeracao tipoGeracao) {
+		return null;
+	}
+
+	@Override
+	public String ComandoGetAtributos() {
+		return null;
+	}
+
+	@Override
+	public String ComandoGetNotNUll() {
+		return null;
+	}
+
+	@Override
+	public String ComandoGetTipo() {
+		return null;
+	}
 }
