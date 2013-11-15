@@ -9,6 +9,7 @@ import edu.uniasselvi.ads24.bob.bean.CampoDecimal;
 import edu.uniasselvi.ads24.bob.bean.CampoInteger;
 import edu.uniasselvi.ads24.bob.bean.CampoString;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
+import edu.uniasselvi.ads24.bob.enumeradores.EBusinessExceptions;
 import edu.uniasselvi.ads24.bob.exceptions.BusinessExceptions;
 
 public final class MenuMain {
@@ -20,16 +21,23 @@ public final class MenuMain {
 
 		int opcaoDesejada = DesignMenus.menuPrincipal(teclado);
 		while (opcaoDesejada > 0) {
-			switch (opcaoDesejada) {
-			case 1:
-				DesignMenus.limparConsole();
-				CriarTabela(teclado);
-				break;
-			case 2:
-				DesignMenus.limparConsole();
-				break;
-			default:
-				break;
+			try
+			{
+				switch (opcaoDesejada) {
+				case 1:
+					DesignMenus.limparConsole();
+					CriarTabela(teclado);
+					break;
+				case 2:
+					DesignMenus.limparConsole();
+					break;
+				default:
+					break;
+				}
+			}
+			catch  (Exception e)
+			{
+				System.out.println("OPS!Houve um problema! :(~ " +e.getMessage() );
 			}
 			opcaoDesejada = DesignMenus.menuPrincipal(teclado);
 		}
@@ -56,9 +64,12 @@ public final class MenuMain {
 			campoDecimal.setTabela(tabela);
 			break;
 		default:
-			break;
+			throw new BusinessExceptions(EBusinessExceptions.OPCAO_INVALIDA);
 		}
-
+		
+		System.out.println("Continuar cadastrando campos para esta tabela?(S/N)");
+		if (teclado.readLine().equalsIgnoreCase("S"))
+			CriarCampo(teclado, tabela);
 	}
 
 	private static void CriarTabela(BufferedReader teclado)
