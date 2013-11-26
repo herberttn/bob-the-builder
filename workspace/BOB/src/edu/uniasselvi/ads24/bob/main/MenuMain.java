@@ -16,13 +16,14 @@ public final class MenuMain {
 
 	public static void main(String[] args) throws BusinessExceptions,
 			IOException {
-		BufferedReader teclado = new BufferedReader(new InputStreamReader(
-				System.in));
-		int opcaoDesejada = -1;
 		try {
-			opcaoDesejada = DesignMenus.menuPrincipal(teclado);
-			while (opcaoDesejada > 0) {
+			BufferedReader teclado = new BufferedReader(new InputStreamReader(
+					System.in));
+			int opcaoDesejada = -1;
+
+			do {
 				try {
+					opcaoDesejada = DesignMenus.menuPrincipal(teclado);
 					switch (opcaoDesejada) {
 					case 1:
 						DesignMenus.limparConsole();
@@ -31,18 +32,23 @@ public final class MenuMain {
 					case 2:
 						DesignMenus.limparConsole();
 						break;
+					case 0:
+						System.out.println("Até logo!");
+						break;
 					default:
 						break;
 					}
 				} catch (BusinessExceptions e) {
 					System.out.println("OPS!Houve um problema! :(~ "
 							+ e.getMessage());
+					opcaoDesejada = 666;
 				}
-				opcaoDesejada = DesignMenus.menuPrincipal(teclado);
-			}
+
+			} while (opcaoDesejada > 0);
+
 		} catch (Exception e) {
 			System.out.println("Houston, we have a problem! :/ "
-					+ e.getMessage());			
+					+ e.getMessage());
 		}
 	}
 
