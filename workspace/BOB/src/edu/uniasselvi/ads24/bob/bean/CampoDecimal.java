@@ -1,47 +1,28 @@
 package edu.uniasselvi.ads24.bob.bean;
 
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage {
+public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage, IDBCommands {
 	
 	private int tamanho;
-	// Número de casas decimais;
-	private int precisaoDecimais;
-
-	public CampoDecimal(int ID, int tamanho, int precisaoDecimais, String nome,
-			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
-			boolean excluido) {
-		super.setID(ID);
-		super.setNome(nome);
-		super.setLegenda(legenda);
-		super.setObrigatorio(obrigatorio);
-		super.setExcluido(excluido);
-		super.setChavePrimaria(chavePrimaria);
-		super.setTabela(tabela);
-		
-		setTamanho(tamanho);
-		setPrecisaoDecimais(precisaoDecimais);
-	}
+	private int precisaoDecimais; // Número de casas decimais
 
 	public CampoDecimal() {
-		// TODO Auto-generated constructor stub
+		this(-1, null, null, null, false, false, false, -1, -1);
 	}
 
-	public int getTamanho() {
-		return tamanho;
-	}
-
-	public void setTamanho(int tamanho) {
-		this.tamanho = tamanho;
-	}
-
-	public int getPrecisaoDecimais() {
-		return this.precisaoDecimais;
-	}
-
-	public void setPrecisaoDecimais(int precisaoDecimais) {
-		this.precisaoDecimais = precisaoDecimais;
+	public CampoDecimal(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, int tamanho, int precisaoDecimais) {
+		this.setID(ID);
+		this.setNome(nome);
+		this.setLegenda(legenda);
+		this.setObrigatorio(obrigatorio);
+		this.setExcluido(excluido);
+		this.setChavePrimaria(chavePrimaria);
+		this.setTabela(tabela);
+		this.setTamanho(tamanho);
+		this.setPrecisaoDecimais(precisaoDecimais);
 	}
 
 	@Override
@@ -77,5 +58,21 @@ public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage {
 	@Override
 	public String ComandoGetTipo() {
 		return " DECIMAL(" + getTamanho() + ", " + getPrecisaoDecimais() + ") ";
+	}
+	
+	public int getTamanho() {
+		return tamanho;
+	}
+
+	public void setTamanho(int tamanho) {
+		this.tamanho = tamanho;
+	}
+
+	public int getPrecisaoDecimais() {
+		return this.precisaoDecimais;
+	}
+
+	public void setPrecisaoDecimais(int precisaoDecimais) {
+		this.precisaoDecimais = precisaoDecimais;
 	}
 }

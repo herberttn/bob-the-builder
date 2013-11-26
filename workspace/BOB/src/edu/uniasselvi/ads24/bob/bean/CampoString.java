@@ -1,37 +1,26 @@
 package edu.uniasselvi.ads24.bob.bean;
 
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoString extends CampoBase implements IDataDefinitionLanguage {
+public class CampoString extends CampoBase implements IDataDefinitionLanguage, IDBCommands {
 
-	//Capacidade de armazenamento do campo string.
-	private int tamanho;
+	private int tamanho; // Capacidade de armazenamento do campo string.
 	
-	public CampoString(int ID, int tamanho, String nome,
-			String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria,
-			boolean excluido) {
-		super.setID(ID);
-		super.setNome(nome);
-		super.setLegenda(legenda);
-		super.setObrigatorio(obrigatorio);
-		super.setExcluido(excluido);
-		super.setChavePrimaria(chavePrimaria);
-		super.setTabela(tabela);
-		
-		setTamanho(tamanho);
-	}
-
 	public CampoString() {
-		// TODO Auto-generated constructor stub
+		this(-1, null, null, null, false, false, false, -1);
 	}
 
-	public int getTamanho() {
-		return this.tamanho;
-	}
-
-	public void setTamanho(int tamanho) {
-		this.tamanho = tamanho;
+	public CampoString(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, int tamanho) {
+		this.setID(ID);
+		this.setNome(nome);
+		this.setLegenda(legenda);
+		this.setObrigatorio(obrigatorio);
+		this.setExcluido(excluido);
+		this.setChavePrimaria(chavePrimaria);
+		this.setTabela(tabela);
+		this.setTamanho(tamanho);
 	}
 
 	@Override
@@ -67,5 +56,13 @@ public class CampoString extends CampoBase implements IDataDefinitionLanguage {
 	@Override
 	public String ComandoGetTipo() {
 		return " VARCHAR(" + getTamanho() + ") ";
+	}
+	
+	public int getTamanho() {
+		return this.tamanho;
+	}
+
+	public void setTamanho(int tamanho) {
+		this.tamanho = tamanho;
 	}
 }

@@ -1,9 +1,10 @@
 package edu.uniasselvi.ads24.bob.bean;
 
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoPK extends CampoInteger implements IDataDefinitionLanguage {
+public class CampoPK extends CampoInteger implements IDataDefinitionLanguage, IDBCommands {
 
 	@Override
 	public void Criar() {

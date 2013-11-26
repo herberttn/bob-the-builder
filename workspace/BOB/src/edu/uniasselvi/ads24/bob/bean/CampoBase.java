@@ -1,89 +1,66 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public abstract class CampoBase implements IDataDefinitionLanguage {
+public abstract class CampoBase extends RegistroBase implements IDataDefinitionLanguage, IDBCommands {
 
-	private int id;
 	private String nome;
 	private String legenda;
 	private Tabela tabela;
 	private boolean obrigatorio;
 	private boolean excluido;
 	private boolean chavePrimaria;
-
-	public Tabela getTabela() {
-		return this.tabela;
-	}
-
-	public void setTabela(Tabela tabela) {
-		this.tabela = tabela;
-	}
-
-	public CampoBase(int ID, String nome, String legenda, Tabela tabela,
-			boolean obrigatorio, boolean excluido, boolean chavePrimaria) {
-		setID(ID);
-		setNome(nome);
-		setLegenda(legenda);
-		setObrigatorio(obrigatorio);
-		setExcluido(excluido);
-		setChavePrimaria(chavePrimaria);
-		setTabela(tabela);
-	}
+	private boolean integridade;	
 
 	public CampoBase() {
-		this(-1, "Indefinido", "Indefinido", null, false, false, false);
+		this(-1, null, null, null, false, false, false, false);
 	}
 
-	public void setChavePrimaria(boolean chavePrimaria) {
-		this.chavePrimaria = chavePrimaria;
+	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade) {
+		this.setID(ID);
+		this.setNome(nome);
+		this.setLegenda(legenda);
+		this.setTabela(tabela);
+		this.setObrigatorio(obrigatorio);
+		this.setExcluido(excluido);
+		this.setChavePrimaria(chavePrimaria);
+		this.setIntegridade(integridade);
 	}
+	
+//	+ " TIPO INTEGER NOT NULL, "
+//	+ " VALORPADRAOINTEGER INTEGER, "
+//	+ " VALORPADRAOSTRING VARCHAR(200), "
+//	+ " VALORPADRAODATETIME DATETIME, "
+//	+ " VALORPADRAODECIMAL DECIMAL(15,4), "
+//	+ " PESQUISATABELA INTEGER, "
+//	+ " PESQUISACAMPO INTEGER, "
+//	+ " TAMANHO INTEGER, "
+//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_TABELA(TABELA ASC), "
+//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_PESQUISATABELA(PESQUISATABELA ASC), "
+//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_PESQUISACAMPO(PESQUISACAMPO ASC), "
+//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_TABELA FOREIGN KEY(TABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
+//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISATABELA FOREIGN KEY(PESQUISATABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
+//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISACAMPO FOREIGN KEY(PESQUISACAMPO) REFERENCES BOB.Z_CAMPOS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION "	
 
-	public boolean getChavePrimaria() {
-		return this.chavePrimaria;
+	public CampoBase(ResultSet resultset) throws SQLException, DBException {
+		this.setID(resultset.getInt("ID"));
+		this.setNome(resultset.getString("NOME"));
+		this.setLegenda(resultset.getString("LEGENDA"));
+		TabelaDAO dao = new TabelaDAO();
+		this.setTabela(dao.consultar(Tabela.class, resultset.getInt("TABELA")));
+		this.setObrigatorio(resultset.getString("OBRIGATORIO").equals("S"));
+		this.setExcluido(resultset.getString("EXCLUIDO").equals("S"));
+		this.setChavePrimaria(resultset.getString("EHPK").equals("S"));
+		this.setIntegridade(resultset.getString("TEMINTEGRIDADE").equals("S"));
 	}
-
-	public int getID() {
-		return this.id;
-	}
-
-	public void setID(int ID) {
-		this.id = ID;
-	}
-
-	public String getNome() {
-		return this.nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getLegenda() {
-		return this.legenda;
-	}
-
-	public void setLegenda(String legenda) {
-		this.legenda = legenda;
-	}
-
-	public boolean getObrigatorio() {
-		return this.obrigatorio;
-	}
-
-	public void setObrigatorio(boolean obrigatorio) {
-		this.obrigatorio = obrigatorio;
-	}
-
-	public boolean getExcluido() {
-		return excluido;
-	}
-
-	public void setExcluido(boolean excluido) {
-		this.excluido = excluido;
-	}
-
+	
 	@Override
 	public abstract void Criar();
 
@@ -144,4 +121,60 @@ public abstract class CampoBase implements IDataDefinitionLanguage {
 	public String ComandoGetTipo() {
 		return "";
 	}
+	
+	public Tabela getTabela() {
+		return this.tabela;
+	}
+
+	public void setTabela(Tabela tabela) {
+		this.tabela = tabela;
+	}
+	
+	public void setChavePrimaria(boolean chavePrimaria) {
+		this.chavePrimaria = chavePrimaria;
+	}
+
+	public boolean getChavePrimaria() {
+		return this.chavePrimaria;
+	}
+
+	public String getNome() {
+		return this.nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getLegenda() {
+		return this.legenda;
+	}
+
+	public void setLegenda(String legenda) {
+		this.legenda = legenda;
+	}
+
+	public boolean isObrigatorio() {
+		return this.obrigatorio;
+	}
+
+	public void setObrigatorio(boolean obrigatorio) {
+		this.obrigatorio = obrigatorio;
+	}
+
+	public boolean isExcluido() {
+		return excluido;
+	}
+	
+	public void setExcluido(boolean excluido) {
+		this.excluido = excluido;
+	}
+	
+	public boolean isIntegridade() {
+		return integridade;
+	}
+
+	public void setIntegridade(boolean integridade) {
+		this.integridade = integridade;
+	}	
 }

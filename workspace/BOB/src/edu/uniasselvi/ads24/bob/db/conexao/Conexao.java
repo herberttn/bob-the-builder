@@ -16,7 +16,7 @@ public class Conexao {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/BOB", "root", "social");
 			return conn;
 		} catch (Exception e) {
-			throw new DBException(EErrosDB.ABRE_CONEXAO, e.getMessage());
+			throw new DBException(EErrosDB.ABRIR_CONEXAO, e.getMessage());
 		}
 	}
 	
@@ -28,7 +28,7 @@ public class Conexao {
 			}
 			return;
 		} catch (Exception e) {
-			throw new DBException(EErrosDB.FECHA_CONEXAO, e.getMessage());
+			throw new DBException(EErrosDB.FECHAR_CONEXAO, e.getMessage());
 		}
 	}
 }

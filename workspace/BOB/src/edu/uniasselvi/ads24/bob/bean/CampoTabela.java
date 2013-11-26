@@ -1,64 +1,46 @@
 package edu.uniasselvi.ads24.bob.bean;
 
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage {
+public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage, IDBCommands {
 	
-	private Tabela tabela;
-	private boolean integridade;
-	
-	public CampoTabela(int ID, Tabela tabela, String nome,
-			String legenda, Tabela tabelaPai, boolean integridade, boolean obrigatorio, boolean chavePrimaria,
-			boolean excluido) {
-		super.setID(ID);
-		super.setNome(nome);
-		super.setLegenda(legenda);
-		super.setObrigatorio(obrigatorio);
-		super.setExcluido(excluido);
-		super.setChavePrimaria(chavePrimaria);
-		super.setTabela(tabelaPai);
-
-		SetTabela(tabela);
-		setIntegridade(integridade);
-	}
+	private Tabela tabelaPai;
 	
 	public CampoTabela() {
-		// TODO Auto-generated constructor stub
+		this(-1, null, null, null, false, false, false, null, false);
+		
 	}
 
-	public void setIntegridade(boolean integridade)
-	{
-		this.integridade = integridade;
+	public CampoTabela(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, Tabela tabelaPai, boolean integridade) {
+		this.setID(ID);
+		this.setNome(nome);
+		this.setTabela(tabela);		
+		this.setLegenda(legenda);
+		this.setObrigatorio(obrigatorio);
+		this.setExcluido(excluido);
+		this.setChavePrimaria(chavePrimaria);
+		this.setTabelaPai(tabelaPai);
+		this.setIntegridade(integridade);
 	}
 	
-	public boolean getIntegridade()
-	{
-		return this.integridade;
-	}
-	
-	public Tabela getTabela()
-	{
-		return this.tabela;
-	}
-	public void SetTabela(Tabela tabela)
-	{
-		this.tabela = tabela;
-	}
-
 	@Override
 	public void Criar() {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void Alterar() {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void Excluir() {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -79,5 +61,23 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 	@Override
 	public String ComandoGetTipo() {
 		return super.ComandoGetTipo();
+	}
+	
+	public boolean getIntegridade()
+	{
+		return this.integridade;
+	}
+	
+	public void setIntegridade(boolean integridade)
+	{
+		this.integridade = integridade;
+	}
+	
+	public Tabela getTabelaPai() {
+		return tabelaPai;
+	}
+
+	public void setTabelaPai(Tabela tabelaPai) {
+		this.tabelaPai = tabelaPai;
 	}
 }
