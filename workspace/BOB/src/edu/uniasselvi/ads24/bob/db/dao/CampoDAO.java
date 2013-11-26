@@ -1,6 +1,8 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
+import java.util.List;
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
+import edu.uniasselvi.ads24.bob.bean.CampoBase;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public class CampoDAO extends BaseDAO implements IDataAccessObject {
@@ -40,5 +42,17 @@ public class CampoDAO extends BaseDAO implements IDataAccessObject {
 						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_TABELA FOREIGN KEY(TABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
 						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISATABELA FOREIGN KEY(PESQUISATABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
 						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISACAMPO FOREIGN KEY(PESQUISACAMPO) REFERENCES BOB.Z_CAMPOS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION ");
+	}
+	
+	public CampoBase consultar(int ID) throws DBException {
+		return super.consultar(CampoBase.class, ID);
+	}
+	
+	public List<CampoBase> consultarVarios(String where) throws DBException {
+		return super.consultarVarios(CampoBase.class, where);
+	}
+	
+	public List<CampoBase> consultarTodos() throws DBException {
+		return super.consultarTodos(CampoBase.class);
 	}
 }

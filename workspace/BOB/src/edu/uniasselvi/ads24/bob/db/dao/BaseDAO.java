@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import edu.uniasselvi.ads24.bob.bean.RegistroBase;
 import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 import edu.uniasselvi.ads24.bob.enumeradores.EErrosDB;
@@ -57,15 +56,13 @@ public abstract class BaseDAO implements IDataAccessObject {
 		}
 	}
 
-	private <T> T instanciarEPreencher(Class<T> clazz, ResultSet resultSet)
-			throws InstantiationException, IllegalAccessException,
-			SQLException, DBException {
+	protected <T> T instanciarEPreencher(Class<T> clazz, ResultSet resultSet) throws InstantiationException, IllegalAccessException, SQLException, DBException {
 		T temp = clazz.newInstance();
 		((RegistroBase) temp).loadResultSet(resultSet);
 		return temp;
 	}
 
-	public <T> T consultar(Class<T> clazz, int ID) throws DBException {
+	protected <T> T consultar(Class<T> clazz, int ID) throws DBException {
 
 		Connection conexao = Conexao.getConexao();
 		try {
@@ -87,7 +84,28 @@ public abstract class BaseDAO implements IDataAccessObject {
 		}
 	}
 
-	public <T> List<T> consultarTodos(Class<T> clazz) throws DBException {
+	public <T> List<T> consultarVarios(Class<T> clazz, String where) throws DBException {
+		
+		Connection conexao = Conexao.getConexao();
+		try {
+			List<T> lista = new ArrayList<T>();
+			Statement st = conexao.createStatement();
+			ResultSet rs = st.executeQuery("SELECT " + TableFields() + " FROM "
+					+ TableName() + " WHERE " + where + ";");
+
+			while (rs.next()) {
+				lista.add(instanciarEPreencher(clazz, rs));
+			}
+			return lista;
+
+		} catch (Exception e) {
+			throw new DBException(EErrosDB.CONSULTAR, e.getMessage());
+		} finally {
+			Conexao.closeConexao();
+		}
+	}
+	
+	protected <T> List<T> consultarTodos(Class<T> clazz) throws DBException {
 
 		Connection conexao = Conexao.getConexao();
 		try {

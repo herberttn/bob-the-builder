@@ -40,7 +40,7 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
 		TabelaDAO dao = new TabelaDAO();
-		this.setTabela(dao.consultar(Tabela.class, resultset.getInt("TABELA")));
+		this.setTabela(dao.consultar(resultset.getInt("TABELA")));
 		this.setObrigatorio(resultset.getString("OBRIGATORIO").equals("S"));
 		this.setExcluido(resultset.getString("EXCLUIDO").equals("S"));
 		this.setChavePrimaria(resultset.getString("EHPK").equals("S"));

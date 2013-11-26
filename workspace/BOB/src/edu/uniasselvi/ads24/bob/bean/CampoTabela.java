@@ -26,7 +26,7 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
 		super.loadResultSet(resultset);
 		TabelaDAO dao = new TabelaDAO();
-		this.setTabelaPai(dao.consultar(Tabela.class, resultset.getInt("PESQUISATABELA")));		
+		this.setTabelaPai(dao.consultar(resultset.getInt("PESQUISATABELA")));		
 	}		
 	
 	@Override

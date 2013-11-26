@@ -2,6 +2,8 @@ package edu.uniasselvi.ads24.bob.bean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
 public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
@@ -23,12 +25,12 @@ public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
 		this.setPorFilial(porFilial);
 	}
 	
-	public Tabela(ResultSet resultset) throws SQLException {
+	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
 		this.setID(resultset.getInt("ID"));
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
 		this.setPorEmpresa(resultset.getString("POREMPRESA").equals("S"));
-		this.setPorFilial(resultset.getString("PORFILIAL").equals("S"));		
+		this.setPorFilial(resultset.getString("PORFILIAL").equals("S"));	
 	}
 	
 	@Override
