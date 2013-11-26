@@ -18,35 +18,37 @@ public final class MenuMain {
 			IOException {
 		BufferedReader teclado = new BufferedReader(new InputStreamReader(
 				System.in));
-
-		int opcaoDesejada = DesignMenus.menuPrincipal(teclado);
-		while (opcaoDesejada > 0) {
-			try
-			{
-				switch (opcaoDesejada) {
-				case 1:
-					DesignMenus.limparConsole();
-					CriarTabela(teclado);
-					break;
-				case 2:
-					DesignMenus.limparConsole();
-					break;
-				default:
-					break;
-				}
-			}
-			catch  (Exception e)
-			{
-				System.out.println("OPS!Houve um problema! :(~ " +e.getMessage() );
-			}
+		int opcaoDesejada = -1;
+		try {
 			opcaoDesejada = DesignMenus.menuPrincipal(teclado);
+			while (opcaoDesejada > 0) {
+				try {
+					switch (opcaoDesejada) {
+					case 1:
+						DesignMenus.limparConsole();
+						CriarTabela(teclado);
+						break;
+					case 2:
+						DesignMenus.limparConsole();
+						break;
+					default:
+						break;
+					}
+				} catch (BusinessExceptions e) {
+					System.out.println("OPS!Houve um problema! :(~ "
+							+ e.getMessage());
+				}
+				opcaoDesejada = DesignMenus.menuPrincipal(teclado);
+			}
+		} catch (Exception e) {
+			System.out.println("Houston, we have a problem! :/ "
+					+ e.getMessage());			
 		}
 	}
 
 	private static void CriarCampo(BufferedReader teclado, Tabela tabela)
 			throws BusinessExceptions, IOException {
 		int opcaoEscolhida = DesignMenus.menuOpcoesTipoCampo(teclado);
-
 		switch (opcaoEscolhida) {
 		case 1:
 			CampoInteger campoInteger = DesignMenus
@@ -66,8 +68,9 @@ public final class MenuMain {
 		default:
 			throw new BusinessExceptions(EBusinessExceptions.OPCAO_INVALIDA);
 		}
-		
-		System.out.println("Continuar cadastrando campos para esta tabela?(S/N)");
+
+		System.out
+				.println("Continuar cadastrando campos para esta tabela?(S/N)");
 		if (teclado.readLine().equalsIgnoreCase("S"))
 			CriarCampo(teclado, tabela);
 	}
