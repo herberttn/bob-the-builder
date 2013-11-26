@@ -1,6 +1,9 @@
 package edu.uniasselvi.ads24.bob.bean;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public class RegistroBase {
 
@@ -14,8 +17,7 @@ public class RegistroBase {
 		this.setID(ID);
 	}
 	
-	public void loadResultSet(ResultSet resultSet)
-	{
+	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
 		
 	}
 

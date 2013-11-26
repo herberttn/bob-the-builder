@@ -1,9 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
-import java.sql.Connection;
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
-import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 
 public class ScriptDAO extends BaseDAO implements IDataAccessObject {
 	
@@ -11,6 +9,11 @@ public class ScriptDAO extends BaseDAO implements IDataAccessObject {
 	public String TableName() {
 		return "BOB.Z_SCRIPT";
 	}
+	
+	@Override
+	public String TableFields() {
+		return "ID, TIPO, DATAHORA, COMANDO, BOBVERSION";
+	}	
 
 	public boolean CriarTabela() throws DBException {
 

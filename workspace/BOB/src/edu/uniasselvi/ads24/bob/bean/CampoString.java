@@ -1,6 +1,10 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
@@ -9,18 +13,18 @@ public class CampoString extends CampoBase implements IDataDefinitionLanguage, I
 	private int tamanho; // Capacidade de armazenamento do campo string.
 	
 	public CampoString() {
-		this(-1, null, null, null, false, false, false, -1);
+		this(-1, null, null, null, false, false, false, false, -1);
 	}
 
-	public CampoString(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, int tamanho) {
-		this.setID(ID);
-		this.setNome(nome);
-		this.setLegenda(legenda);
-		this.setObrigatorio(obrigatorio);
-		this.setExcluido(excluido);
-		this.setChavePrimaria(chavePrimaria);
-		this.setTabela(tabela);
+	public CampoString(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, int tamanho) {
+		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
 		this.setTamanho(tamanho);
+	}
+	
+	@Override
+	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
+		super.loadResultSet(resultset);
+		this.setTamanho(resultset.getInt("TAMANHO"));
 	}
 
 	@Override

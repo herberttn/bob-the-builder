@@ -60,7 +60,7 @@ public class GeradorComandoDB {
 			comando = " ALTER TABLE BOB." + campoAntes.getTabela().getNome().toUpperCase() 
 			        + " ADD COLUMN " + campoAntes.getNome().toUpperCase();
 			
-			if (campoAntes.getObrigatorio())
+			if (campoAntes.isObrigatorio())
 				comando = comando + " NOT NULL ";
 			break;
 

@@ -24,7 +24,7 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	}
 
 	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade) {
-		this.setID(ID);
+		super(ID);
 		this.setNome(nome);
 		this.setLegenda(legenda);
 		this.setTabela(tabela);
@@ -34,22 +34,8 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		this.setIntegridade(integridade);
 	}
 	
-//	+ " TIPO INTEGER NOT NULL, "
-//	+ " VALORPADRAOINTEGER INTEGER, "
-//	+ " VALORPADRAOSTRING VARCHAR(200), "
-//	+ " VALORPADRAODATETIME DATETIME, "
-//	+ " VALORPADRAODECIMAL DECIMAL(15,4), "
-//	+ " PESQUISATABELA INTEGER, "
-//	+ " PESQUISACAMPO INTEGER, "
-//	+ " TAMANHO INTEGER, "
-//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_TABELA(TABELA ASC), "
-//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_PESQUISATABELA(PESQUISATABELA ASC), "
-//	+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_PESQUISACAMPO(PESQUISACAMPO ASC), "
-//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_TABELA FOREIGN KEY(TABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
-//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISATABELA FOREIGN KEY(PESQUISATABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
-//	+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISACAMPO FOREIGN KEY(PESQUISACAMPO) REFERENCES BOB.Z_CAMPOS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION "	
-
-	public CampoBase(ResultSet resultset) throws SQLException, DBException {
+	@Override
+	public void loadResultSet(ResultSet resultset) throws SQLException, DBException {
 		this.setID(resultset.getInt("ID"));
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
@@ -111,7 +97,7 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 
 	@Override
 	public String ComandoGetNotNUll() {
-		if (getObrigatorio())
+		if (isObrigatorio())
 			return " NOT NULL ";
 
 		return "";

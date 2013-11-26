@@ -1,6 +1,11 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
@@ -9,21 +14,20 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 	private Tabela tabelaPai;
 	
 	public CampoTabela() {
-		this(-1, null, null, null, false, false, false, null, false);
-		
+		this(-1, null, null, null, false, false, false, false, null);
 	}
 
-	public CampoTabela(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, Tabela tabelaPai, boolean integridade) {
-		this.setID(ID);
-		this.setNome(nome);
-		this.setTabela(tabela);		
-		this.setLegenda(legenda);
-		this.setObrigatorio(obrigatorio);
-		this.setExcluido(excluido);
-		this.setChavePrimaria(chavePrimaria);
+	public CampoTabela(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, Tabela tabelaPai) {
+		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
 		this.setTabelaPai(tabelaPai);
-		this.setIntegridade(integridade);
 	}
+	
+	@Override
+	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
+		super.loadResultSet(resultset);
+		TabelaDAO dao = new TabelaDAO();
+		this.setTabelaPai(dao.consultar(Tabela.class, resultset.getInt("PESQUISATABELA")));		
+	}		
 	
 	@Override
 	public void Criar() {
@@ -61,16 +65,6 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 	@Override
 	public String ComandoGetTipo() {
 		return super.ComandoGetTipo();
-	}
-	
-	public boolean getIntegridade()
-	{
-		return this.integridade;
-	}
-	
-	public void setIntegridade(boolean integridade)
-	{
-		this.integridade = integridade;
 	}
 	
 	public Tabela getTabelaPai() {

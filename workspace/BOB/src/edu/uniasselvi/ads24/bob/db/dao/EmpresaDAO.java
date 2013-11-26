@@ -1,9 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
-import java.sql.Connection;
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
-import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 
 public class EmpresaDAO extends BaseDAO implements IDataAccessObject {
 	
@@ -12,6 +10,11 @@ public class EmpresaDAO extends BaseDAO implements IDataAccessObject {
 		return "BOB.EMPRESAS";
 	}
 
+	@Override
+	public String TableFields() {
+		return "ID, NOME, CNPJ";
+	}
+		
 	public boolean CriarTabela() throws DBException {
 
 		return super.CriarTabela(" ID INTEGER NOT NULL PRIMARY KEY, "
