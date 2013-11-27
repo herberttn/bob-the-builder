@@ -8,18 +8,18 @@ import edu.uniasselvi.ads24.bob.exceptions.DBException;
 public class TabelaDAO extends BaseDAO implements IDataAccessObject {
 
 	@Override
-	public String TableName() {
+	public String tableName() {
 		return "BOB.Z_TABELAS";
 	}
 
 	@Override
-	public String TableFields() {
+	public String tableFields() {
 		return "ID, NOME, LEGENDA, POREMPRESA, PORFILIAL";
 	}
 
-	public boolean CriarTabela() throws DBException {
+	public boolean criarTabela() throws DBException {
 
-		return super.CriarTabela(" ID INTEGER NOT NULL PRIMARY KEY, "
+		return super.criarTabela(" ID INTEGER NOT NULL PRIMARY KEY, "
 				+ " NOME VARCHAR(45) NOT NULL, "
 				+ " LEGENDA VARCHAR(250) NOT NULL, "
 				+ " POREMPRESA CHAR(1) NOT NULL, "
@@ -36,5 +36,21 @@ public class TabelaDAO extends BaseDAO implements IDataAccessObject {
 	
 	public List<Tabela> consultarTodos() throws DBException {
 		return super.consultarTodos(Tabela.class);
+	}
+	
+	public boolean inserir(Tabela bean) throws DBException {
+		return super.inserir(Tabela.class, bean);
+	}
+	
+	public boolean inserirVarios(List<Tabela> beanList) throws DBException {
+		return super.inserirVarios(Tabela.class, beanList);
+	}
+	
+	public boolean alterar(Tabela bean) throws DBException {
+		return super.alterar(Tabela.class, bean);
+	}
+	
+	public boolean excluir(Tabela bean) throws DBException {
+		return super.excluir(Tabela.class, bean);
 	}
 }

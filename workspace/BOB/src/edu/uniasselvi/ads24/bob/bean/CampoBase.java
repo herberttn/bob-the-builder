@@ -1,5 +1,6 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,9 +12,9 @@ import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
 public abstract class CampoBase extends RegistroBase implements IDataDefinitionLanguage, IDBCommands {
 
+	private Tabela tabela;
 	private String nome;
 	private String legenda;
-	private Tabela tabela;
 	private boolean obrigatorio;
 	private boolean excluido;
 	private boolean chavePrimaria;
@@ -24,7 +25,9 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	}
 
 	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade) {
+		
 		super(ID);
+		
 		this.setNome(nome);
 		this.setLegenda(legenda);
 		this.setTabela(tabela);
@@ -35,8 +38,10 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	}
 	
 	@Override
-	public void loadResultSet(ResultSet resultset) throws SQLException, DBException {
-		this.setID(resultset.getInt("ID"));
+	public void loadFromResultSet(ResultSet resultset) throws SQLException, DBException {
+		
+		super.loadFromResultSet(resultset);
+		
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
 		TabelaDAO dao = new TabelaDAO();
@@ -48,10 +53,29 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	}
 	
 	@Override
-	public abstract void Criar();
-
+	public void loadStatementParams(PreparedStatement preparedStatement) throws SQLException, DBException {
+		
+		super.loadStatementParams(preparedStatement);
+		
+		preparedStatement.setInt(2, this.getTabela().getID()); // TABELA 
+		preparedStatement.setString(3, this.getNome()); // NOME
+		preparedStatement.setString(4, this.getLegenda()); // LEGENDA
+		preparedStatement.setString(5, this.isObrigatorio() ? "S" : "N"); // OBRIGATORIO
+		preparedStatement.setNull(6, java.sql.Types.INTEGER); // TIPO
+		preparedStatement.setString(7, this.isExcluido() ? "S" : "N"); // EXCLUIDO
+		preparedStatement.setNull(8, java.sql.Types.INTEGER); // VALORPADRAOINTEGER
+		preparedStatement.setNull(9, java.sql.Types.VARCHAR); // VALORPADRAOSTRING
+		preparedStatement.setNull(10, java.sql.Types.DATE); // VALORPADRAODATETIME
+		preparedStatement.setNull(11, java.sql.Types.DECIMAL); // VALORPADRAODECIMAL
+		preparedStatement.setNull(12, java.sql.Types.INTEGER); // PESQUISATABELA
+		preparedStatement.setNull(13, java.sql.Types.VARCHAR); // EHPK
+		preparedStatement.setString(14, this.isIntegridade() ? "S" : "N"); // TEMINTEGRIDADE
+		preparedStatement.setNull(15, java.sql.Types.INTEGER); // TAMANHO
+		preparedStatement.setNull(16, java.sql.Types.INTEGER); // PRECISAO
+	}	
+	
 	@Override
-	public abstract void Alterar();
+	public abstract void Salvar();
 
 	@Override
 	public abstract void Excluir();
@@ -120,7 +144,7 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		this.chavePrimaria = chavePrimaria;
 	}
 
-	public boolean getChavePrimaria() {
+	public boolean isChavePrimaria() {
 		return this.chavePrimaria;
 	}
 
@@ -162,5 +186,21 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 
 	public void setIntegridade(boolean integridade) {
 		this.integridade = integridade;
+	}	
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder(super.toString());
+
+		sb.append("\nTabela (ID - Nome).......: ").append(this.getTabela().getID() + " - " + this.getTabela().getNome());
+		sb.append("\nNome.....................: ").append(this.getNome());
+		sb.append("\nLegenda..................: ").append(this.getLegenda());
+		sb.append("\nObrigatório..............: ").append(this.isObrigatorio() ? "Sim" : "Não");
+		sb.append("\nExcluído.................: ").append(this.isExcluido() ? "Sim" : "Não");
+		sb.append("\nChave primária...........: ").append(this.isChavePrimaria() ? "Sim" : "Não");
+		sb.append("\nTem integridade..........: ").append(this.isIntegridade() ? "Sim" : "Não");
+		
+		return sb.toString();
 	}	
 }

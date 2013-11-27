@@ -2,6 +2,7 @@ package edu.uniasselvi.ads24.bob.bean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
@@ -17,8 +18,12 @@ public class RegistroBase {
 		this.setID(ID);
 	}
 	
-	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
-		
+	public void loadFromResultSet(ResultSet resultset)  throws SQLException, DBException {
+		this.setID(resultset.getInt("ID"));
+	}
+	
+	public void loadStatementParams(PreparedStatement preparedStatement) throws SQLException, DBException {
+		preparedStatement.setInt(1, this.getID()); // ID
 	}
 
 	public int getID() {
@@ -27,5 +32,10 @@ public class RegistroBase {
 
 	public void setID(int id) {
 		this.id = id;
+	}
+	
+	@Override
+	public String toString() {
+		return "ID.......................: " + this.getID();
 	}
 }

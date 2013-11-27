@@ -1,5 +1,6 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,31 +15,36 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 	private Tabela tabelaPai;
 	
 	public CampoTabela() {
-		this(-1, null, null, null, false, false, false, false, null);
+		this(-1, null, null, null, false, false, false, false, 0, null);
 	}
 
-	public CampoTabela(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, Tabela tabelaPai) {
-		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
+	public CampoTabela(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, int valorPadrao, Tabela tabelaPai) {
+		
+		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade, valorPadrao);
+		
 		this.setTabelaPai(tabelaPai);
 	}
 	
 	@Override
-	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
-		super.loadResultSet(resultset);
+	public void loadFromResultSet(ResultSet resultset)  throws SQLException, DBException {
+		
+		super.loadFromResultSet(resultset);
+		
 		TabelaDAO dao = new TabelaDAO();
 		this.setTabelaPai(dao.consultar(resultset.getInt("PESQUISATABELA")));		
+	}	
+	
+	@Override
+	public void loadStatementParams(PreparedStatement preparedStatement) throws SQLException, DBException {
+		
+		super.loadStatementParams(preparedStatement);
+		
+		preparedStatement.setInt(12, this.getTabelaPai().getID()); // PESQUISATABELA
 	}		
 	
 	@Override
-	public void Criar() {
+	public void Salvar() {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void Alterar() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -73,5 +79,15 @@ public class CampoTabela extends CampoInteger implements IDataDefinitionLanguage
 
 	public void setTabelaPai(Tabela tabelaPai) {
 		this.tabelaPai = tabelaPai;
+	}	
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder(super.toString());
+
+		sb.append("\nTabela pai (ID - Nome)...: ").append(this.getTabelaPai().getID() + " - " + this.getTabelaPai().getNome());
+
+		return sb.toString();
 	}
 }

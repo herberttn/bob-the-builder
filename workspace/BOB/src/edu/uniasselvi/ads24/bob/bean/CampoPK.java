@@ -7,20 +7,16 @@ import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 public class CampoPK extends CampoInteger implements IDataDefinitionLanguage, IDBCommands {
 
 	public CampoPK() {
-		this(-1, null, null, null, false, false, false, false);
+		this(-1, null, null, null, false, false, false, false, 0);
 	}
 	
-	public CampoPK(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade) {
-		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
+	public CampoPK(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade, int valorPadrao) {
+		
+		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade, valorPadrao);
 	}
 	
 	@Override
-	public void Criar() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void Alterar() {
+	public void Salvar() {
 		// TODO Auto-generated method stub
 	}
 
@@ -47,5 +43,10 @@ public class CampoPK extends CampoInteger implements IDataDefinitionLanguage, ID
 	@Override
 	public String ComandoGetTipo() {
 		return super.ComandoGetTipo();
+	}	
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

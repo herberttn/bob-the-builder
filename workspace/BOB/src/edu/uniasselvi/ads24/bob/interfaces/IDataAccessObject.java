@@ -4,10 +4,11 @@ import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public interface IDataAccessObject {
 
-	public abstract String TableName();
-	public abstract String TableFields();
-	public abstract boolean CriarTabela() throws DBException;
+	public abstract String tableName();
+	public abstract String tableFields();
 	
-	public boolean CriarTabela(String statement) throws DBException;
-	public boolean ExcluirTabela() throws DBException;
+	public abstract boolean criarTabela() throws DBException;
+	
+	public boolean criarTabela(String statement) throws DBException;
+	public boolean excluirTabela() throws DBException;
 }

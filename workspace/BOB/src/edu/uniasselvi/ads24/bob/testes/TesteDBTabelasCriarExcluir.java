@@ -1,11 +1,6 @@
 package edu.uniasselvi.ads24.bob.testes;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import edu.uniasselvi.ads24.bob.enumeradores.EErrosDB;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
-import edu.uniasselvi.ads24.bob.bean.Tabela;
-import edu.uniasselvi.ads24.bob.db.conexao.Conexao;
 import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
 import edu.uniasselvi.ads24.bob.db.dao.EmpresaDAO;
 import edu.uniasselvi.ads24.bob.db.dao.FilialDAO;
@@ -35,77 +30,40 @@ public class TesteDBTabelasCriarExcluir {
 
 		try {
 			System.out.println("Criando tabela Z_TABELAS.");
-			tabelaDAO.CriarTabela();
+			tabelaDAO.criarTabela();
 
 			System.out.println("Criando tabela Z_CAMPOS.");
-			campoDAO.CriarTabela();
+			campoDAO.criarTabela();
 
 			System.out.println("Criando tabela EMPRESAS.");
-			empresaDAO.CriarTabela();
+			empresaDAO.criarTabela();
 
 			System.out.println("Criando tabela FILIAIS.");
-			filialDAO.CriarTabela();
+			filialDAO.criarTabela();
 
 			System.out.println("Criando tabela Z_SCRIPT.");
-			scriptDAO.CriarTabela();
+			scriptDAO.criarTabela();
 		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		
-		
-		
-		Connection conexao = Conexao.getConexao();
-		try {
-			PreparedStatement pst = conexao.prepareStatement("INSERT INTO Z_TABELAS (ID, NOME, LEGENDA, POREMPRESA, PORFILIAL) VALUES (?, ?, ?, ?, ?);");
-			pst.setInt(1, 1);
-			pst.setString(2, "teste");
-			pst.setString(3, "teste legenda");
-			pst.setString(4, "S");
-			pst.setString(5, "N");
-			
-			if (pst.executeUpdate() > 0)
-				System.out.println("Inserido.");
-			else
-				System.out.println("Não inserido.");
-		} catch (Exception e) {
-			throw new DBException(EErrosDB.INSERIR_DADOS, e.getMessage());
-		} finally {
-			Conexao.closeConexao();
-		}		
-		
-		
-		Tabela teste = tabelaDAO.consultar(1);
-		
-		if (teste != null)
-		{
-			System.out.println(teste.getNome());			
-		}
-		else
-			System.out.println("nada");
-		
-		
-		
-		
-		
-
 		try {
 			System.out.println("Excluindo tabela Z_SCRIPT.");
-			scriptDAO.ExcluirTabela();
+			scriptDAO.excluirTabela();
 			
 			System.out.println("Excluindo tabela FILIAIS.");
-			filialDAO.ExcluirTabela();
+			filialDAO.excluirTabela();
 
 			System.out.println("Excluindo tabela EMPRESAS.");
-			empresaDAO.ExcluirTabela();
+			empresaDAO.excluirTabela();
 
 			System.out.println("Excluindo tabela Z_CAMPOS.");
-			campoDAO.ExcluirTabela();
+			campoDAO.excluirTabela();
 
 			System.out.println("Excluindo tabela Z_TABELAS.");
-			tabelaDAO.ExcluirTabela();
+			tabelaDAO.excluirTabela();
 
 		} catch (DBException e) {
 			System.out.println(e.getMessage());
@@ -115,5 +73,4 @@ public class TesteDBTabelasCriarExcluir {
 
 		System.out.println("Sucesso.");
 	}
-
 }

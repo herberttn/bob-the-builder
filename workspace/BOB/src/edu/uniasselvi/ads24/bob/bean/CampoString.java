@@ -1,5 +1,6 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -10,30 +11,41 @@ import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
 public class CampoString extends CampoBase implements IDataDefinitionLanguage, IDBCommands {
 
+	private String valorPadrao;
 	private int tamanho; // Capacidade de armazenamento do campo string.
 	
 	public CampoString() {
-		this(-1, null, null, null, false, false, false, false, -1);
+		this(-1, null, null, null, false, false, false, false, null, -1);
 	}
 
-	public CampoString(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, int tamanho) {
+	public CampoString(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, String valorPadrao, int tamanho) {
+		
 		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
+		
+		this.setValorPadrao(valorPadrao);
 		this.setTamanho(tamanho);
 	}
 	
 	@Override
-	public void loadResultSet(ResultSet resultset)  throws SQLException, DBException {
-		super.loadResultSet(resultset);
+	public void loadFromResultSet(ResultSet resultset)  throws SQLException, DBException {
+		
+		super.loadFromResultSet(resultset);
+		
+		this.setValorPadrao(resultset.getString("VALORPADRAOSTRING"));
 		this.setTamanho(resultset.getInt("TAMANHO"));
 	}
+	
+	@Override
+	public void loadStatementParams(PreparedStatement preparedStatement) throws SQLException, DBException {
+		
+		super.loadStatementParams(preparedStatement);
+		
+		preparedStatement.setString(9, this.getValorPadrao()); // VALORPADRAOSTRING
+		preparedStatement.setInt(15, this.getTamanho()); // TAMANHO
+	}		
 
 	@Override
-	public void Criar() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void Alterar() {
+	public void Salvar() {
 		// TODO Auto-generated method stub
 	}
 
@@ -62,11 +74,30 @@ public class CampoString extends CampoBase implements IDataDefinitionLanguage, I
 		return " VARCHAR(" + getTamanho() + ") ";
 	}
 	
+	public String getValorPadrao() {
+		return valorPadrao;
+	}
+
+	public void setValorPadrao(String valorPadrao) {
+		this.valorPadrao = valorPadrao;
+	}
+
 	public int getTamanho() {
 		return this.tamanho;
 	}
 
 	public void setTamanho(int tamanho) {
 		this.tamanho = tamanho;
+	}	
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder(super.toString());
+
+		sb.append("\nValor padrão.............: ").append(this.getValorPadrao());
+		sb.append("\nTamanho..................: ").append(this.getTamanho());
+
+		return sb.toString();
 	}
 }

@@ -7,6 +7,8 @@ public enum EErrosDB {
 	CRIAR_TABELA("Falha ao criar a tabela no banco de dados."),
 	EXCLUIR_TABELA("Falha ao excluir a tabela no banco de dados."),
 	INSERIR_DADOS("Falha ao inserir dados na tabela."),
+	ALTERAR_DADOS("Falha ao alterar dados da tabela."),
+	EXCLUIR_DADOS("Falha ao excluir dados da tabela."),
 	ROLLBACK("Falha ao executar o rollback."),
 	CONSULTAR("Falha ao consultar dados na tabela.");
 	

@@ -8,18 +8,18 @@ import edu.uniasselvi.ads24.bob.exceptions.DBException;
 public class ScriptDAO extends BaseDAO implements IDataAccessObject {
 	
 	@Override
-	public String TableName() {
+	public String tableName() {
 		return "BOB.Z_SCRIPT";
 	}
 	
 	@Override
-	public String TableFields() {
+	public String tableFields() {
 		return "ID, TIPO, DATAHORA, COMANDO, BOBVERSION";
 	}	
 
-	public boolean CriarTabela() throws DBException {
+	public boolean criarTabela() throws DBException {
 
-		return super.CriarTabela(" ID INTEGER NOT NULL PRIMARY KEY, "
+		return super.criarTabela(" ID INTEGER NOT NULL PRIMARY KEY, "
 					+ " TIPO INTEGER NOT NULL, "
 					+ " DATAHORA DATETIME NOT NULL, "
 					+ " COMANDO VARCHAR(2048) NOT NULL, "
@@ -36,5 +36,21 @@ public class ScriptDAO extends BaseDAO implements IDataAccessObject {
 	
 	public List<Script> consultarTodos() throws DBException {
 		return super.consultarTodos(Script.class);
+	}
+	
+	public boolean inserir(Script bean) throws DBException {
+		return super.inserir(Script.class, bean);
+	}
+	
+	public boolean inserirVarios(List<Script> beanList) throws DBException {
+		return super.inserirVarios(Script.class, beanList);
+	}
+	
+	public boolean alterar(Script bean) throws DBException {
+		return super.alterar(Script.class, bean);
+	}
+	
+	public boolean excluir(Script bean) throws DBException {
+		return super.excluir(Script.class, bean);
 	}
 }
