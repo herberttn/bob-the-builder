@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
@@ -53,6 +54,8 @@ public class Script extends RegistroBase implements IDataDefinitionLanguage {
 
 	@Override
 	public void Salvar() {
+
+		
 		// TODO Auto-generated method stub
 	}
 

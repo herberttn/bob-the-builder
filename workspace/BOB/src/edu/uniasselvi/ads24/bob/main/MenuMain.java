@@ -11,6 +11,7 @@ import edu.uniasselvi.ads24.bob.bean.CampoString;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
 import edu.uniasselvi.ads24.bob.enumeradores.EBusinessExceptions;
 import edu.uniasselvi.ads24.bob.exceptions.BusinessExceptions;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public final class MenuMain {
 
@@ -31,6 +32,9 @@ public final class MenuMain {
 						break;
 					case 2:
 						DesignMenus.limparConsole();
+						break;
+					case 3:
+						DesignMenus.menuListarTabelas();
 						break;
 					case 0:
 						System.out.println("Até logo!");
@@ -82,9 +86,10 @@ public final class MenuMain {
 	}
 
 	private static void CriarTabela(BufferedReader teclado)
-			throws BusinessExceptions, IOException {
+			throws BusinessExceptions, IOException, DBException {
 
 		Tabela tabela = DesignMenus.menuCriarTabela(teclado);
+		tabela.Salvar();
 		System.out.println("Deseja cadastrar campos desta tabela?(S/N)");
 		if (teclado.readLine().equalsIgnoreCase("S")) {
 			CriarCampo(teclado, tabela);

@@ -1,15 +1,20 @@
 package edu.uniasselvi.ads24.bob.main;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.uniasselvi.ads24.bob.bean.CampoBase;
 import edu.uniasselvi.ads24.bob.bean.CampoDecimal;
 import edu.uniasselvi.ads24.bob.bean.CampoInteger;
 import edu.uniasselvi.ads24.bob.bean.CampoString;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.EBusinessExceptions;
 import edu.uniasselvi.ads24.bob.exceptions.BusinessExceptions;
+import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
 public final class DesignMenus {
 
@@ -140,7 +145,19 @@ public final class DesignMenus {
 		campoDecimal.setPrecisaoDecimais(TryParseInt(teclado.readLine()));
 		return campoDecimal;
 	}
-
+	public static String menuListarTabelas() throws DBException
+	{
+		TabelaDAO tabelas = new TabelaDAO();
+		List<Tabela> listTabelas;
+		listTabelas = tabelas.consultarVarios("1=1");
+		System.out.println("abc");
+		for (Tabela tabela : listTabelas) {
+			System.out.println("abc2");
+			System.out.println(tabela.toString());			
+		}
+		
+		return "";
+	}
 	public static void limparConsole() {
 		for (int i = 0; i < 100; ++i)
 			System.out.println();

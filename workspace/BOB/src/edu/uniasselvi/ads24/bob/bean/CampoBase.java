@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
 import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -36,7 +37,7 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		this.setChavePrimaria(chavePrimaria);
 		this.setIntegridade(integridade);
 	}
-	
+
 	@Override
 	public void loadFromResultSet(ResultSet resultset) throws SQLException, DBException {
 		
@@ -75,10 +76,10 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	}	
 	
 	@Override
-	public abstract void Salvar();
+	public abstract void Salvar() throws DBException;
 
 	@Override
-	public abstract void Excluir();
+	public abstract void Excluir() throws DBException;
 
 	@Override
 	public String ComandoGerar(ETipoGeracao tipoGeracao) {

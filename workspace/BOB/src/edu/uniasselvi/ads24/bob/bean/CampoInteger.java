@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
@@ -41,13 +42,18 @@ public class CampoInteger extends CampoBase implements IDataDefinitionLanguage, 
 	}
 
 	@Override
-	public void Salvar() {
-		// TODO Auto-generated method stub
+	public void Salvar() throws DBException {
+		CampoDAO campo = new CampoDAO();
+		if (campo.consultarVarios("NOME = '"+getNome()+"' AND TABELA = " + getTabela().getID()).size() > 0)
+			campo.alterar(this);
+		else
+			campo.inserir(this);		
 	}
 
 	@Override
-	public void Excluir() {
-		// TODO Auto-generated method stub
+	public void Excluir() throws DBException {
+		CampoDAO campo = new CampoDAO();
+		campo.excluir(this);
 	}
 
 	@Override

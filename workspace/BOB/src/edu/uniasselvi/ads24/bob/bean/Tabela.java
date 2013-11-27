@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
+import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
@@ -51,13 +52,18 @@ public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
 	}	
 	
 	@Override
-	public void Salvar() {
-		// TODO Auto-generated method stub
+	public void Salvar() throws DBException {
+		TabelaDAO tabela = new TabelaDAO();
+		if (tabela.consultarVarios(" NOME = '" + getNome()+ "'").size() > 0)
+			tabela.inserir(this);
+		else
+			tabela.alterar(this);
 	}
 
 	@Override
-	public void Excluir() {
-		// TODO Auto-generated method stub
+	public void Excluir() throws DBException {
+		TabelaDAO tabela = new TabelaDAO();
+		tabela.excluir(this);
 	}
 	
 	public String getNome() {
