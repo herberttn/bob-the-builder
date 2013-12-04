@@ -10,7 +10,9 @@ public enum EErrosDB {
 	ALTERAR_DADOS("Falha ao alterar dados da tabela."),
 	EXCLUIR_DADOS("Falha ao excluir dados da tabela."),
 	ROLLBACK("Falha ao executar o rollback."),
-	CONSULTAR("Falha ao consultar dados na tabela.");
+	CONSULTAR("Falha ao consultar dados na tabela."),
+	GERAR_ID("Falha ao realizar consulta para a geração de novo ID."),
+	EXECUCAO_COMANDO("Falha do executar o comando de banco.");
 	
 	private final String descricaoErro;
 

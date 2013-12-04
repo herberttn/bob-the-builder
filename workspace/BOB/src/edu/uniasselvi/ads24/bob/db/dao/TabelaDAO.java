@@ -1,6 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.util.List;
+
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.bean.Tabela;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -9,7 +10,7 @@ public class TabelaDAO extends BaseDAO implements IDataAccessObject {
 
 	@Override
 	public String tableName() {
-		return "BOB.Z_TABELAS";
+		return "Z_TABELAS";
 	}
 
 	@Override
@@ -30,12 +31,12 @@ public class TabelaDAO extends BaseDAO implements IDataAccessObject {
 		return super.consultar(Tabela.class, ID);
 	}
 	
-	public List<Tabela> consultarVarios(String where) throws DBException {
-		return super.consultarVarios(Tabela.class, where);
+	public List<Tabela> consultarVarios(String where, String orderby) throws DBException {
+		return super.consultarVarios(Tabela.class, where, orderby);
 	}
 	
-	public List<Tabela> consultarTodos() throws DBException {
-		return super.consultarTodos(Tabela.class);
+	public List<Tabela> consultarTodos(String orderby) throws DBException {
+		return super.consultarTodos(Tabela.class, orderby);
 	}
 	
 	public boolean inserir(Tabela bean) throws DBException {

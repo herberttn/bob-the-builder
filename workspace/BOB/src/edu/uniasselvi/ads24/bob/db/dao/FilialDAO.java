@@ -1,6 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.util.List;
+
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.bean.Filial;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -31,12 +32,12 @@ public class FilialDAO extends BaseDAO implements IDataAccessObject {
 		return super.consultar(Filial.class, ID);
 	}
 	
-	public List<Filial> consultarVarios(String where) throws DBException {
-		return super.consultarVarios(Filial.class, where);
+	public List<Filial> consultarVarios(String where, String orderby) throws DBException {
+		return super.consultarVarios(Filial.class, where, orderby);
 	}
 	
-	public List<Filial> consultarTodos() throws DBException {
-		return super.consultarTodos(Filial.class);
+	public List<Filial> consultarTodos(String orderby) throws DBException {
+		return super.consultarTodos(Filial.class, orderby);
 	}
 	
 	public boolean inserir(Filial bean) throws DBException {

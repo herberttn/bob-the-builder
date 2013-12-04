@@ -1,16 +1,17 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
-import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoString extends CampoBase implements IDataDefinitionLanguage, IDBCommands {
+public class CampoString extends CampoBase implements IDataDefinitionLanguage, IDBCommands, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String valorPadrao;
 	private int tamanho; // Capacidade de armazenamento do campo string.
@@ -23,6 +24,8 @@ public class CampoString extends CampoBase implements IDataDefinitionLanguage, I
 		
 		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
 		
+		this.setTipo(4);
+
 		this.setValorPadrao(valorPadrao);
 		this.setTamanho(tamanho);
 	}
@@ -44,26 +47,6 @@ public class CampoString extends CampoBase implements IDataDefinitionLanguage, I
 		preparedStatement.setString(9, this.getValorPadrao()); // VALORPADRAOSTRING
 		preparedStatement.setInt(15, this.getTamanho()); // TAMANHO
 	}		
-
-	@Override
-	public void Salvar() throws DBException {
-		CampoDAO campo = new CampoDAO();
-		if (campo.consultarVarios("NOME = '"+getNome()+"' AND TABELA = " + getTabela().getID()).size() > 0)
-			campo.alterar(this);
-		else
-			campo.inserir(this);		
-	}
-
-	@Override
-	public void Excluir() throws DBException {
-		CampoDAO campo = new CampoDAO();
-		campo.excluir(this);
-	}
-
-	@Override
-	public String ComandoGerar(ETipoGeracao tipoGeracao) {
-		return super.ComandoGerar(tipoGeracao);
-	}
 
 	@Override
 	public String ComandoGetAtributos() {

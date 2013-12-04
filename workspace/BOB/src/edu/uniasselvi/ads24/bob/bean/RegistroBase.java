@@ -1,13 +1,16 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 
-public class RegistroBase {
+public class RegistroBase implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private int id;
 	
 	public RegistroBase() {

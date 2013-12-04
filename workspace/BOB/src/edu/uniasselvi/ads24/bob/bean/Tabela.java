@@ -1,14 +1,20 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
+import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.exceptions.GeradorComandoDBException;
+import edu.uniasselvi.ads24.bob.geradores.GeradorComandoDB;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
+public class Tabela extends RegistroBase implements IDataDefinitionLanguage, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	private String nome;
 	private String legenda;
@@ -36,8 +42,8 @@ public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
 		
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
-		this.setPorEmpresa(resultset.getString("POREMPRESA").equals("S"));
-		this.setPorFilial(resultset.getString("PORFILIAL").equals("S"));	
+		this.setPorEmpresa(resultset.getString("POREMPRESA").equalsIgnoreCase("S"));
+		this.setPorFilial(resultset.getString("PORFILIAL").equalsIgnoreCase("S"));	
 	}
 
 	@Override
@@ -52,18 +58,27 @@ public class Tabela extends RegistroBase implements IDataDefinitionLanguage {
 	}	
 	
 	@Override
-	public void Salvar() throws DBException {
+	public void Salvar() throws DBException, GeradorComandoDBException {
+		
 		TabelaDAO tabela = new TabelaDAO();
-		if (tabela.consultarVarios(" NOME = '" + getNome()+ "'").size() > 0)
-			tabela.inserir(this);
-		else
+		
+		if (tabela.consultarVarios("NOME = '" + getNome().toUpperCase() + "'", "ID").size() > 0)
 			tabela.alterar(this);
+		else
+			tabela.inserir(this);
+		
+		GeradorComandoDB gerador = new GeradorComandoDB(ETipoGeracao.CRIACAO, true);
+		gerador.GerarEExecutar(this);
 	}
 
 	@Override
-	public void Excluir() throws DBException {
+	public void Excluir() throws DBException, GeradorComandoDBException {
+		
 		TabelaDAO tabela = new TabelaDAO();
 		tabela.excluir(this);
+		
+		GeradorComandoDB gerador = new GeradorComandoDB(ETipoGeracao.EXCLUSAO, true);
+		gerador.GerarEExecutar(this);
 	}
 	
 	public String getNome() {

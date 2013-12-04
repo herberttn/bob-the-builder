@@ -1,15 +1,17 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.Date;
 
-import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class Script extends RegistroBase implements IDataDefinitionLanguage {
+public class Script extends RegistroBase implements IDataDefinitionLanguage, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	private int tipo;
 	private Date datahora;
@@ -47,7 +49,7 @@ public class Script extends RegistroBase implements IDataDefinitionLanguage {
 		super.loadStatementParams(preparedStatement);
 		
 		preparedStatement.setInt(2, this.getTipo());
-		preparedStatement.setDate(3, new Date(this.getDatahora().getTime()));
+		preparedStatement.setDate(3, new java.sql.Date(this.getDatahora().getTime()));
 		preparedStatement.setString(4, this.getComando());
 		preparedStatement.setString(5, this.getBobversion());
 	}	
@@ -76,8 +78,8 @@ public class Script extends RegistroBase implements IDataDefinitionLanguage {
 		return datahora;
 	}
 
-	public void setDatahora(Date datahora) {
-		this.datahora = datahora;
+	public void setDatahora(java.util.Date date) {
+		this.datahora = date;
 	}
 
 	public String getComando() {

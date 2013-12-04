@@ -1,6 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.util.List;
+
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.bean.Script;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -30,12 +31,12 @@ public class ScriptDAO extends BaseDAO implements IDataAccessObject {
 		return super.consultar(Script.class, ID);
 	}
 	
-	public List<Script> consultarVarios(String where) throws DBException {
-		return super.consultarVarios(Script.class, where);
+	public List<Script> consultarVarios(String where, String orderby) throws DBException {
+		return super.consultarVarios(Script.class, where, orderby);
 	}
 	
-	public List<Script> consultarTodos() throws DBException {
-		return super.consultarTodos(Script.class);
+	public List<Script> consultarTodos(String orderby) throws DBException {
+		return super.consultarTodos(Script.class, orderby);
 	}
 	
 	public boolean inserir(Script bean) throws DBException {

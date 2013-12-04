@@ -1,5 +1,6 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,7 +8,9 @@ import java.sql.SQLException;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class Empresa extends RegistroBase implements IDataDefinitionLanguage {
+public class Empresa extends RegistroBase implements IDataDefinitionLanguage, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String nome;
 	private String cnpj;

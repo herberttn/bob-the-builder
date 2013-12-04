@@ -2,6 +2,7 @@ package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.util.Arrays;
 import java.util.List;
+
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.bean.*;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -39,19 +40,19 @@ public class CampoDAO extends BaseDAO implements IDataAccessObject {
 						+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_TABELA(TABELA ASC), "
 						+ " INDEX BOB.Z_CAMPOS.IDX_FK_ZCAMPOS_PESQUISATABELA(PESQUISATABELA ASC), "
 						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_TABELA FOREIGN KEY(TABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, "
-						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISATABELA FOREIGN KEY(PESQUISATABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION, ");
+						+ " CONSTRAINT BOB.Z_CAMPOS.FK_ZCAMPOS_PESQUISATABELA FOREIGN KEY(PESQUISATABELA) REFERENCES BOB.Z_TABELAS(ID) ON DELETE NO ACTION ON UPDATE NO ACTION ");
 	}
 	
 	public CampoBase consultar(int ID) throws DBException {
 		return super.consultar(CampoBase.class, ID);
 	}
 	
-	public List<CampoBase> consultarVarios(String where) throws DBException {
-		return super.consultarVarios(CampoBase.class, where);
+	public List<CampoBase> consultarVarios(String where, String orderby) throws DBException {
+		return super.consultarVarios(CampoBase.class, where, orderby);
 	}
 	
-	public List<CampoBase> consultarTodos() throws DBException {
-		return super.consultarTodos(CampoBase.class);
+	public List<CampoBase> consultarTodos(String orderby) throws DBException {
+		return super.consultarTodos(CampoBase.class, orderby);
 	}
 	
 	public boolean inserir(CampoBase bean) throws DBException {

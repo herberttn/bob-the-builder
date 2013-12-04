@@ -15,7 +15,18 @@ import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 
 public abstract class BaseDAO implements IDataAccessObject {
-
+	
+	Savepoint sv = null;
+	
+	public void setSavepoint() throws SQLException, DBException {
+		if (this.sv == null)
+			this.sv = Conexao.getConexao().setSavepoint();
+	}
+	
+	public void resetSavepoint() throws SQLException, DBException {
+		this.sv = Conexao.getConexao().setSavepoint();
+	}
+	
 	@Override
 	public abstract String tableName();
 
@@ -24,22 +35,6 @@ public abstract class BaseDAO implements IDataAccessObject {
 
 	@Override
 	public abstract boolean criarTabela() throws DBException;
-
-	@Override
-	public boolean criarTabela(String fields) throws DBException {
-
-		Connection conexao = Conexao.getConexao();
-		try {
-			Statement st = conexao.createStatement();
-			st.execute("CREATE TABLE " + tableName() + " (" + fields + ");");
-			return true;
-
-		} catch (Exception e) {
-			throw new DBException(EErrosDB.CRIAR_TABELA, e.getMessage());
-		} finally {
-			Conexao.closeConexao();
-		}
-	}
 
 	@Override
 	public boolean excluirTabela() throws DBException {
@@ -56,11 +51,20 @@ public abstract class BaseDAO implements IDataAccessObject {
 			Conexao.closeConexao();
 		}
 	}
+	
+	protected boolean criarTabela(String fields) throws DBException {
 
-	protected <T> T instanciarEPreencher(Class<T> clazz, ResultSet resultSet) throws InstantiationException, IllegalAccessException, SQLException, DBException {
-		T temp = clazz.newInstance();
-		((RegistroBase) temp).loadFromResultSet(resultSet);
-		return temp;
+		Connection conexao = Conexao.getConexao();
+		try {
+			Statement st = conexao.createStatement();
+			st.execute("CREATE TABLE " + tableName() + " (" + fields + ");");
+			return true;
+
+		} catch (Exception e) {
+			throw new DBException(EErrosDB.CRIAR_TABELA, e.getMessage());
+		} finally {
+			Conexao.closeConexao();
+		}
 	}
 
 	protected <T> T consultar(Class<T> clazz, int ID) throws DBException {
@@ -85,14 +89,14 @@ public abstract class BaseDAO implements IDataAccessObject {
 		}
 	}
 
-	public <T> List<T> consultarVarios(Class<T> clazz, String where) throws DBException {
+	protected <T> List<T> consultarVarios(Class<T> clazz, String where, String orderby) throws DBException {
 		
 		Connection conexao = Conexao.getConexao();
 		try {
 			List<T> lista = new ArrayList<T>();
 			Statement st = conexao.createStatement();
 			ResultSet rs = st.executeQuery("SELECT " + tableFields() + " FROM "
-					+ tableName() + " WHERE " + where + ";");
+					+ tableName() + " WHERE " + where + " ORDER BY " + orderby.toUpperCase() + ";");
 
 			while (rs.next()) {
 				lista.add(instanciarEPreencher(clazz, rs));
@@ -106,14 +110,14 @@ public abstract class BaseDAO implements IDataAccessObject {
 		}
 	}
 	
-	protected <T> List<T> consultarTodos(Class<T> clazz) throws DBException {
+	protected <T> List<T> consultarTodos(Class<T> clazz, String orderby) throws DBException {
 
 		Connection conexao = Conexao.getConexao();
 		try {
 			List<T> lista = new ArrayList<T>();
 			Statement st = conexao.createStatement();
 			ResultSet rs = st.executeQuery("SELECT " + tableFields() + " FROM "
-					+ tableName() + ";");
+					+ tableName() + " ORDER BY " + orderby.toUpperCase() + ";");
 
 			while (rs.next()) {
 				lista.add(instanciarEPreencher(clazz, rs));
@@ -125,49 +129,35 @@ public abstract class BaseDAO implements IDataAccessObject {
 		} finally {
 			Conexao.closeConexao();
 		}
-	}
-	
-	private String[] splitFieldNames() {
-		// Com a string de campos, cria um array
-		return tableFields().split("[[^a-z]&&[^A-Z]]");
-	}
-	
-	private String buildStatementParams() {
-		
-		// Com a string de campos, cria um array
-		String[] fields = splitFieldNames();
-		
-		String temp = "";
-		
-		for (String field : fields) {
-			if (!field.isEmpty())
-			{
-				if (temp.isEmpty())
-					temp = "?";
-				else
-					temp = temp + ", ?";
-			}					
-		}
-		return temp;
-		
-		// Repete um ? para cada campo
-//		return String.format("%0" + (fields.length - 1) + "d", 0).replace("0", "?, ") + "?";
 	}
 	
 	protected <T> boolean inserir(Class<T> clazz, T bean) throws DBException {
 		
 		Connection conexao = Conexao.getConexao();
 		try {
+			conexao.setAutoCommit(false);
+			this.setSavepoint();
+			
 			PreparedStatement pst = conexao.prepareStatement("INSERT INTO " + tableName() 
 					+ " (" + tableFields() + ") " 
 					+ "VALUES (" + buildStatementParams() + ");");
 			
+			garantirIDUnico(((RegistroBase) bean), this.tableName());
 			((RegistroBase) bean).loadStatementParams(pst);
 			
-			return pst.executeUpdate() > 0;
+			if (pst.executeUpdate() > 0) {
+				conexao.commit();
+				return true;
+			}
+			return false;
 			
 		} catch (Exception e) {
-			throw new DBException(EErrosDB.INSERIR_DADOS, e.getMessage());
+			try {
+				conexao.rollback(sv);
+			} catch (Exception r) {
+				throw new DBException(EErrosDB.ROLLBACK, r.getMessage());
+			}
+				throw new DBException(EErrosDB.INSERIR_DADOS, e.getMessage());
 		} finally {
 			Conexao.closeConexao();
 		}
@@ -176,16 +166,16 @@ public abstract class BaseDAO implements IDataAccessObject {
 	protected <T> boolean inserirVarios(Class<T> clazz, List<T> beanList) throws DBException {
 		
 		Connection conexao = Conexao.getConexao();
-		Savepoint sv = null;
 		try {
 			conexao.setAutoCommit(false);
-			sv = conexao.setSavepoint();
+			this.setSavepoint();
 			
 			PreparedStatement pst = conexao.prepareStatement("INSERT INTO " + tableName() 
 					+ " (" + tableFields() + ") " 
 					+ "VALUES (" + buildStatementParams() + ");");
 			
 			for (T bean : beanList) {
+				garantirIDUnico(((RegistroBase) bean), this.tableName());
 				((RegistroBase) bean).loadStatementParams(pst);
 				pst.executeUpdate();
 			}
@@ -223,6 +213,9 @@ public abstract class BaseDAO implements IDataAccessObject {
 				}
 			}
 			
+			conexao.setAutoCommit(false);
+			this.setSavepoint();
+			
 			PreparedStatement pst = conexao.prepareStatement("UPDATE " + tableName() 
 					+ " SET " + temp
 					+ " WHERE ID = ?;");
@@ -230,10 +223,19 @@ public abstract class BaseDAO implements IDataAccessObject {
 			((RegistroBase) bean).loadStatementParams(pst);
 			pst.setInt(fieldCount + 1, ((RegistroBase) bean).getID());
 			
-			return pst.executeUpdate() > 0;
+			if (pst.executeUpdate() > 0) {
+				conexao.commit();
+				return true;
+			}
+			return false;
 			
 		} catch (Exception e) {
-			throw new DBException(EErrosDB.ALTERAR_DADOS, e.getMessage());
+			try {
+				conexao.rollback(sv);
+			} catch (Exception r) {
+				throw new DBException(EErrosDB.ROLLBACK, r.getMessage());
+			}
+				throw new DBException(EErrosDB.INSERIR_DADOS, e.getMessage());
 		} finally {
 			Conexao.closeConexao();
 		}
@@ -243,17 +245,94 @@ public abstract class BaseDAO implements IDataAccessObject {
 		
 		Connection conexao = Conexao.getConexao();
 		try {
+			conexao.setAutoCommit(false);
+			this.setSavepoint();
+			
 			PreparedStatement pst = conexao.prepareStatement("DELETE FROM " + tableName() 
 					+ " WHERE ID = ?;");
 			
 			pst.setInt(1, ((RegistroBase) bean).getID());
 			
-			return pst.executeUpdate() > 0;
+			if (pst.executeUpdate() > 0) {
+				conexao.commit();
+				return true;
+			}
+			return false;
 			
 		} catch (Exception e) {
-			throw new DBException(EErrosDB.EXCLUIR_DADOS, e.getMessage());
+			try {
+				conexao.rollback(sv);
+			} catch (Exception r) {
+				throw new DBException(EErrosDB.ROLLBACK, r.getMessage());
+			}
+				throw new DBException(EErrosDB.INSERIR_DADOS, e.getMessage());
 		} finally {
 			Conexao.closeConexao();
 		}
-	}	
+	}
+	
+	private void garantirIDUnico(RegistroBase bean, String tableName) throws DBException {
+		
+		// Gera novo ID quando não informado
+		if (bean.getID() <= 0) {
+			bean.setID(gerarID(tableName));
+		} else {
+			// Gera um novo ID quando o informado já existe
+			if (consultar(bean.getClass(), bean.getID()) != null)
+				bean.setID(gerarID(tableName));
+		}
+	}
+	
+	private int gerarID(String tableName) throws DBException {
+		
+		Connection conexao = Conexao.getConexao();
+		try {
+			Statement st = conexao.createStatement();
+			ResultSet rs = st.executeQuery("SELECT IFNULL(MAX(ID), 0) AS TEMP FROM " + tableName() + ";");
+
+			if (rs.first()) {
+				return rs.getInt("TEMP") + 1;
+			}
+			return 1;
+
+		} catch (Exception e) {
+			throw new DBException(EErrosDB.GERAR_ID, e.getMessage());
+		} finally {
+			Conexao.closeConexao();
+		}	
+	}
+	
+	private <T> T instanciarEPreencher(Class<T> clazz, ResultSet resultSet) throws InstantiationException, IllegalAccessException, SQLException, DBException {
+		T temp = clazz.newInstance();
+		((RegistroBase) temp).loadFromResultSet(resultSet);
+		return temp;
+	}
+
+	private String[] splitFieldNames() {
+		// Com a string de campos, cria um array
+		return tableFields().split("[[^a-z]&&[^A-Z]]");
+	}
+	
+	private String buildStatementParams() {
+		
+		// Com a string de campos, cria um array
+		String[] fields = splitFieldNames();
+		
+		String temp = "";
+		
+		for (String field : fields) {
+			if (!field.isEmpty())
+			{
+				if (temp.isEmpty())
+					temp = "?";
+				else
+					temp = temp + ", ?";
+			}					
+		}
+		return temp;
+	}
+	
+	protected Savepoint getSv() {
+		return sv;
+	}
 }

@@ -1,16 +1,17 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
-import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage, IDBCommands {
+public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage, IDBCommands, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	private double valorPadrao;
 	private int tamanho;
@@ -23,6 +24,8 @@ public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage, 
 	public CampoDecimal(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean chavePrimaria, boolean excluido, boolean integridade, double valorPadrao, int tamanho, int precisaoDecimais) {
 		
 		super(ID, nome, legenda, tabela, obrigatorio, excluido, chavePrimaria, integridade);
+		
+		this.setTipo(1);
 		
 		this.setValorPadrao(valorPadrao);
 		this.setTamanho(tamanho);
@@ -48,26 +51,6 @@ public class CampoDecimal extends CampoBase implements IDataDefinitionLanguage, 
 		preparedStatement.setInt(15, this.getTamanho()); // TAMANHO
 		preparedStatement.setInt(16, this.getPrecisaoDecimais()); // PRECISAO
 	}	
-
-	@Override
-	public void Salvar() throws DBException {
-		CampoDAO campo = new CampoDAO();
-		if (campo.consultarVarios("NOME = '"+getNome()+"' AND TABELA = " + getTabela().getID()).size() > 0)
-			campo.alterar(this);
-		else
-			campo.inserir(this);		
-	}
-
-	@Override
-	public void Excluir() throws DBException {
-		CampoDAO campo = new CampoDAO();
-		campo.excluir(this);
-	}
-
-	@Override
-	public String ComandoGerar(ETipoGeracao tipoGeracao) {
-		return super.ComandoGerar(tipoGeracao);
-	}
 
 	@Override
 	public String ComandoGetAtributos() {

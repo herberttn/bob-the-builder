@@ -1,6 +1,7 @@
 package edu.uniasselvi.ads24.bob.db.dao;
 
 import java.util.List;
+
 import edu.uniasselvi.ads24.bob.interfaces.IDataAccessObject;
 import edu.uniasselvi.ads24.bob.bean.Empresa;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
@@ -28,12 +29,12 @@ public class EmpresaDAO extends BaseDAO implements IDataAccessObject {
 		return super.consultar(Empresa.class, ID);
 	}
 	
-	public List<Empresa> consultarVarios(String where) throws DBException {
-		return super.consultarVarios(Empresa.class, where);
+	public List<Empresa> consultarVarios(String where, String orderby) throws DBException {
+		return super.consultarVarios(Empresa.class, where, orderby);
 	}
 	
-	public List<Empresa> consultarTodos() throws DBException {
-		return super.consultarTodos(Empresa.class);
+	public List<Empresa> consultarTodos(String orderby) throws DBException {
+		return super.consultarTodos(Empresa.class, orderby);
 	}
 	
 	public boolean inserir(Empresa bean) throws DBException {

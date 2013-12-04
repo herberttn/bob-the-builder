@@ -1,5 +1,6 @@
 package edu.uniasselvi.ads24.bob.bean;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,18 +9,23 @@ import edu.uniasselvi.ads24.bob.db.dao.CampoDAO;
 import edu.uniasselvi.ads24.bob.db.dao.TabelaDAO;
 import edu.uniasselvi.ads24.bob.enumeradores.ETipoGeracao;
 import edu.uniasselvi.ads24.bob.exceptions.DBException;
+import edu.uniasselvi.ads24.bob.exceptions.GeradorComandoDBException;
+import edu.uniasselvi.ads24.bob.geradores.GeradorComandoDB;
 import edu.uniasselvi.ads24.bob.interfaces.IDBCommands;
 import edu.uniasselvi.ads24.bob.interfaces.IDataDefinitionLanguage;
 
-public abstract class CampoBase extends RegistroBase implements IDataDefinitionLanguage, IDBCommands {
+public class CampoBase extends RegistroBase implements IDataDefinitionLanguage, IDBCommands, Serializable {
 
+	private static final long serialVersionUID = 1L;
+
+	private int tipo;
 	private Tabela tabela;
 	private String nome;
 	private String legenda;
 	private boolean obrigatorio;
 	private boolean excluido;
 	private boolean chavePrimaria;
-	private boolean integridade;	
+	private boolean integridade;
 
 	public CampoBase() {
 		this(-1, null, null, null, false, false, false, false);
@@ -28,7 +34,8 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 	public CampoBase(int ID, String nome, String legenda, Tabela tabela, boolean obrigatorio, boolean excluido, boolean chavePrimaria, boolean integridade) {
 		
 		super(ID);
-		
+		this.setTipo(0);
+				
 		this.setNome(nome);
 		this.setLegenda(legenda);
 		this.setTabela(tabela);
@@ -43,14 +50,15 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		
 		super.loadFromResultSet(resultset);
 		
+		this.setTipo(resultset.getInt("TIPO"));
 		this.setNome(resultset.getString("NOME"));
 		this.setLegenda(resultset.getString("LEGENDA"));
 		TabelaDAO dao = new TabelaDAO();
 		this.setTabela(dao.consultar(resultset.getInt("TABELA")));
-		this.setObrigatorio(resultset.getString("OBRIGATORIO").equals("S"));
-		this.setExcluido(resultset.getString("EXCLUIDO").equals("S"));
-		this.setChavePrimaria(resultset.getString("EHPK").equals("S"));
-		this.setIntegridade(resultset.getString("TEMINTEGRIDADE").equals("S"));
+		this.setObrigatorio(resultset.getString("OBRIGATORIO").equalsIgnoreCase("S"));
+		this.setExcluido(resultset.getString("EXCLUIDO").equalsIgnoreCase("S"));
+		this.setChavePrimaria(resultset.getString("EHPK").equalsIgnoreCase("S"));
+		this.setIntegridade(resultset.getString("TEMINTEGRIDADE").equalsIgnoreCase("S"));
 	}
 	
 	@Override
@@ -62,57 +70,44 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		preparedStatement.setString(3, this.getNome()); // NOME
 		preparedStatement.setString(4, this.getLegenda()); // LEGENDA
 		preparedStatement.setString(5, this.isObrigatorio() ? "S" : "N"); // OBRIGATORIO
-		preparedStatement.setNull(6, java.sql.Types.INTEGER); // TIPO
+		preparedStatement.setInt(6, this.getTipo()); // TIPO
 		preparedStatement.setString(7, this.isExcluido() ? "S" : "N"); // EXCLUIDO
 		preparedStatement.setNull(8, java.sql.Types.INTEGER); // VALORPADRAOINTEGER
 		preparedStatement.setNull(9, java.sql.Types.VARCHAR); // VALORPADRAOSTRING
 		preparedStatement.setNull(10, java.sql.Types.DATE); // VALORPADRAODATETIME
 		preparedStatement.setNull(11, java.sql.Types.DECIMAL); // VALORPADRAODECIMAL
 		preparedStatement.setNull(12, java.sql.Types.INTEGER); // PESQUISATABELA
-		preparedStatement.setNull(13, java.sql.Types.VARCHAR); // EHPK
+		preparedStatement.setString(13, "N"); // EHPK
 		preparedStatement.setString(14, this.isIntegridade() ? "S" : "N"); // TEMINTEGRIDADE
 		preparedStatement.setNull(15, java.sql.Types.INTEGER); // TAMANHO
 		preparedStatement.setNull(16, java.sql.Types.INTEGER); // PRECISAO
 	}	
 	
 	@Override
-	public abstract void Salvar() throws DBException;
-
+	public void Salvar() throws DBException, GeradorComandoDBException, SQLException {
+		
+		CampoDAO dao = new CampoDAO();
+		dao.resetSavepoint();
+		
+		GeradorComandoDB gerador = new GeradorComandoDB(ETipoGeracao.CRIACAO, true);
+		gerador.GerarEExecutar(this);
+		
+		if (dao.consultarVarios("NOME = '" + getNome().toUpperCase() + "' AND TABELA = " + getTabela().getID(), "ID").size() > 0)
+			dao.alterar(this);
+		else
+			dao.inserir(this);
+	}
+	
 	@Override
-	public abstract void Excluir() throws DBException;
-
-	@Override
-	public String ComandoGerar(ETipoGeracao tipoGeracao) {
-
-		String comando = "ALTER TABLE " + getTabela().getNome().toUpperCase();
-
-		switch (tipoGeracao) {
-		case NENHUM:
-			return null;
-
-		case CRIACAO:
-			comando = comando + " ADD COLUMN " + getNome().toUpperCase()
-					+ ComandoGetTipo() 
-					+ ComandoGetNotNUll()
-					+ ComandoGetAtributos();
-			break;
-
-		case ALTERACAO:
-			comando = comando + " CHANGE COLUMN " + getNome().toUpperCase()
-					+ ComandoGetTipo() 
-					+ ComandoGetNotNUll()
-					+ ComandoGetAtributos();
-			break;
-
-		case EXCLUSAO:
-			comando = comando + " DROP COLUMN " + getNome().toUpperCase();
-			break;
-
-		default:
-			return null;
-		}
-
-		return comando;
+	public void Excluir() throws DBException, GeradorComandoDBException, SQLException {
+		
+		CampoDAO dao = new CampoDAO();
+		dao.resetSavepoint();
+		
+		GeradorComandoDB gerador = new GeradorComandoDB(ETipoGeracao.EXCLUSAO, true);
+		gerador.GerarEExecutar(this);
+		
+		dao.excluir(this);
 	}
 
 	@Override
@@ -133,6 +128,14 @@ public abstract class CampoBase extends RegistroBase implements IDataDefinitionL
 		return "";
 	}
 	
+	public int getTipo() {
+		return tipo;
+	}
+
+	protected void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+
 	public Tabela getTabela() {
 		return this.tabela;
 	}
